@@ -7,7 +7,7 @@ namespace Collapsenav.Net.Tool.DynamicApi;
 
 public class DynamicApiConfig
 {
-    public string GlobalPrefix { get; set; }
+    public string? GlobalPrefix { get; set; }
     public List<string> GetPrefix { get; set; } = new();
     public List<string> PostPrefix { get; set; } = new();
     public List<string> PutPrefix { get; set; } = new();
@@ -135,7 +135,7 @@ public class DynamicApiConfig
         {
             var newSelectors = controller.Selectors.Select(sel =>
             {
-                var route = $@"{GlobalPrefix}/{sel.AttributeRouteModel.Template}";
+                var route = $@"{GlobalPrefix}/{sel.AttributeRouteModel?.Template}";
                 Console.WriteLine(@$"route= {route}");
                 return new SelectorModel { AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(route)), };
             }).ToList();
@@ -158,6 +158,8 @@ public class DynamicApiConfig
         if (!action.Selectors.HasRouteAttribute() && actionName.NotEmpty())
         {
             var selector = action.Selectors.IsEmpty() ? new SelectorModel() : action.Selectors.FirstOrDefault();
+            if (selector == null)
+                return;
             action.Selectors.Clear();
             action.Selectors.Add(selector);
             if (!action.Selectors.HasActionAttribute())

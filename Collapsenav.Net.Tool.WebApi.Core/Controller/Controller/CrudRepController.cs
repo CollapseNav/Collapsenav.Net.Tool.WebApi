@@ -23,7 +23,7 @@ public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudControll
     /// 添加(单个)
     /// </summary>
     [HttpPost]
-    public virtual async Task<T> AddAsync([FromBody] CreateT entity) => await Write.AddAsync(entity);
+    public virtual async Task<T?> AddAsync([FromBody] CreateT entity) => await Write.AddAsync(entity);
 
     /// <summary>
     /// 添加(多个)
@@ -34,7 +34,7 @@ public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudControll
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null) => await Read.QueryPageAsync(input, page);
+    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest? page = null) => await Read.QueryPageAsync(input, page);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
@@ -46,7 +46,7 @@ public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudControll
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T> QueryAsync(string id)
+    public virtual async Task<T?> QueryAsync(string id)
     {
         return await Read.QueryAsync(id);
     }
@@ -99,9 +99,9 @@ public class CrudRepController<TKey, T, CreateT, GetT> : CrudRepController<T, Cr
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T> QueryAsync(TKey id) => await Read.QueryAsync(id);
+    public virtual async Task<T?> QueryAsync(TKey id) => await Read.QueryAsync(id);
     [NonAction]
-    public override Task<T> QueryAsync(string id) => base.QueryAsync(id);
+    public override Task<T?> QueryAsync(string id) => base.QueryAsync(id);
     /// <summary>
     /// 根据Ids查询
     /// </summary>

@@ -6,7 +6,7 @@ public class AddControllerChangeProvider : IActionDescriptorChangeProvider
 {
     public static AddControllerChangeProvider Instance { get; } = new AddControllerChangeProvider();
 
-    public CancellationTokenSource TokenSource { get; private set; }
+    public CancellationTokenSource? TokenSource { get; private set; }
 
     public bool HasChanged { get; set; }
 

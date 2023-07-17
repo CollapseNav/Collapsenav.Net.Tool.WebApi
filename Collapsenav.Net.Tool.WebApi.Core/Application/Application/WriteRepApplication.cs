@@ -9,7 +9,7 @@ public class WriteRepApplication<T> : Application<T>, IWriteApplication<T>
     {
         Repo = repository;
     }
-    public virtual async Task<T> AddAsync(T entity) => await Repo.AddAsync(entity);
+    public virtual async Task<T?> AddAsync(T entity) => await Repo.AddAsync(entity);
     public virtual async Task<bool> DeleteAsync(string id, bool isTrue = false) => await Repo.DeleteAsync(id, isTrue);
 
     public void Dispose() => Repo.Save();

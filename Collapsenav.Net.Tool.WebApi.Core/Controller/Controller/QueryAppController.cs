@@ -18,7 +18,7 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null) => await App.QueryPageAsync(input, page);
+    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest? page = null) => await App.QueryPageAsync(input, page);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
@@ -29,7 +29,7 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T> QueryAsync(string id) => await App.QueryByStringIdAsync(id);
+    public virtual async Task<T?> QueryAsync(string id) => await App.QueryByStringIdAsync(id);
 }
 [ApiController]
 [Route("[controller]")]
@@ -46,9 +46,9 @@ public class QueryAppController<TKey, T, GetT> : QueryAppController<T, GetT>, IQ
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T> QueryAsync(TKey id) => await App.QueryAsync(id);
+    public virtual async Task<T?> QueryAsync(TKey id) => await App.QueryAsync(id);
     [NonAction]
-    public override async Task<T> QueryAsync(string id) => await App.QueryByStringIdAsync(id);
+    public override async Task<T?> QueryAsync(string id) => await App.QueryByStringIdAsync(id);
     /// <summary>
     /// 根据Ids查询
     /// </summary>

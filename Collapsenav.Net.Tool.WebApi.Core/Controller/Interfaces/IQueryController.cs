@@ -10,7 +10,7 @@ public interface IQueryController<T, GetT> : IReadController<T, GetT>
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null);
+    Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest? page = null);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
@@ -40,7 +40,7 @@ public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadCont
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null);
+    Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest? page = null);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>

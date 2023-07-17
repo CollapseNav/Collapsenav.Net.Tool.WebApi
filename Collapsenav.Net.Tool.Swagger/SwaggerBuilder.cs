@@ -10,7 +10,7 @@ public class SwaggerBuilder
     /// <summary>
     /// Api信息配置
     /// </summary>
-    private OpenApiInfo info;
+    private OpenApiInfo? info;
     /// <summary>
     /// 使用注释
     /// </summary>
@@ -69,14 +69,14 @@ public class SwaggerBuilder
                 Actions.Remove(nameof(UseJwtAuth));
         }
     }
-    public OpenApiInfo Info
+    public OpenApiInfo? Info
     {
         get => info;
         set
         {
             info = value;
             if (value != null)
-                Actions.AddOrUpdate(nameof(Info), options => options.SwaggerDoc(info.Version, info));
+                Actions.AddOrUpdate(nameof(Info), options => options.SwaggerDoc(info?.Version, info));
             else
             {
                 info = null;

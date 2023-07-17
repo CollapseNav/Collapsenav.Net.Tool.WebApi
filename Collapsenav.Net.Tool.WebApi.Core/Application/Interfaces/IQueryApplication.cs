@@ -13,7 +13,7 @@ public interface IQueryApplication<T, GetT> : IReadApplication<T>
     /// <summary>
     /// 分页查询
     /// </summary>
-    Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null);
+    Task<PageData<T>> QueryPageAsync(GetT input, PageRequest? page = null);
     /// <summary>
     /// 列表查询
     /// </summary>
@@ -43,7 +43,7 @@ public interface INoConstraintsQueryApplication<T, GetT> : INoConstraintsReadApp
     /// <summary>
     /// 分页查询
     /// </summary>
-    Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null);
+    Task<PageData<T>> QueryPageAsync(GetT input, PageRequest? page = null);
     /// <summary>
     /// 列表查询
     /// </summary>

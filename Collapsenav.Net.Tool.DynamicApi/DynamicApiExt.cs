@@ -10,7 +10,7 @@ namespace Collapsenav.Net.Tool.DynamicApi;
 public static class DynamicApiExt
 {
     internal static bool HasControllerRoute { get; set; } = false;
-    public static DynamicApiConfig GlobalConfig { get; set; }
+    public static DynamicApiConfig? GlobalConfig { get; set; }
     /// <summary>
     /// 判断type是否被标记为 动态api
     /// </summary>
@@ -31,7 +31,7 @@ public static class DynamicApiExt
     /// <summary>
     /// 注册动态api
     /// </summary>
-    public static IServiceCollection AddDynamicWebApi(this IServiceCollection services, DynamicApiConfig config = null)
+    public static IServiceCollection AddDynamicWebApi(this IServiceCollection services, DynamicApiConfig? config = null)
     {
         services.AddControllers().AddDynamicWebApi(config ?? new DynamicApiConfig().AddDefault());
         return services;
@@ -39,7 +39,7 @@ public static class DynamicApiExt
     /// <summary>
     /// 注册动态api
     /// </summary>
-    public static IMvcBuilder AddDynamicWebApi(this IMvcBuilder builder, DynamicApiConfig config = null)
+    public static IMvcBuilder AddDynamicWebApi(this IMvcBuilder builder, DynamicApiConfig? config = null)
     {
         GlobalConfig = config ?? new();
         // 添加自定义的 DynamicApiProvider 用以识别标记的api
@@ -96,7 +96,7 @@ public static class DynamicApiExt
     /// </remarks>
     public static void BuildControllerRoute(this ControllerModel controller)
     {
-        GlobalConfig.ConfigControllerRoute(controller);
+        GlobalConfig?.ConfigControllerRoute(controller);
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ public static class DynamicApiExt
     /// </summary>
     public static void BuildRoute(this ActionModel action)
     {
-        GlobalConfig.ConfigActionRoute(action);
+        GlobalConfig?.ConfigActionRoute(action);
     }
 
     public static void ConfigureParameters(this ActionModel action)

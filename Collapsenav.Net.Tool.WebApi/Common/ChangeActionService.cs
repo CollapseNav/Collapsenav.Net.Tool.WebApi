@@ -9,16 +9,16 @@ namespace Collapsenav.Net.Tool.WebApi;
 /// </summary>
 public class ChangeActionService : IHostedService
 {
-    private readonly ApplicationPartManager Part;
+    private readonly ApplicationPartManager? Part;
     public ChangeActionService(IServiceScopeFactory scope)
     {
         Part = scope.CreateScope().ServiceProvider.GetService<ApplicationPartManager>();
     }
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        Part.ApplicationParts.Add(new AssemblyPart(DynamicApiExt.Ass));
+        Part?.ApplicationParts.Add(new AssemblyPart(DynamicApiExt.Ass));
         AddControllerChangeProvider.Instance.HasChanged = true;
-        AddControllerChangeProvider.Instance.TokenSource.Cancel();
+        AddControllerChangeProvider.Instance.TokenSource?.Cancel();
         await Task.CompletedTask;
     }
 

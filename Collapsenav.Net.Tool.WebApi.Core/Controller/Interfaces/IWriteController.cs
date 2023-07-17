@@ -15,7 +15,7 @@ public interface IWriteController<T, CreateT> : IController, IDisposable
     /// 添加(单个)
     /// </summary>
     [HttpPost]
-    Task<T> AddAsync([FromBody] CreateT entity);
+    Task<T?> AddAsync([FromBody] CreateT entity);
 }
 public interface IWriteController<TKey, T, CreateT> : IWriteController<T, CreateT>
     where T : IEntity<TKey>
@@ -45,7 +45,7 @@ public interface INoConstraintsWriteController<T, CreateT> : INoConstraintsContr
     /// 添加(单个)
     /// </summary>
     [HttpPost]
-    Task<T> AddAsync([FromBody] CreateT entity);
+    Task<T?> AddAsync([FromBody] CreateT entity);
 }
 public interface INoConstraintsWriteController<TKey, T, CreateT> : INoConstraintsWriteController<T, CreateT>
 {

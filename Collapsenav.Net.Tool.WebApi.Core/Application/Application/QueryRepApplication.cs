@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
 namespace Collapsenav.Net.Tool.WebApi;
 
@@ -15,7 +14,8 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplica
     }
     public virtual IQueryable<T> GetQuery(GetT input) => input.GetQuery(Repo.Query());
     public virtual IQueryable<T> GetQuery<NewGetT>(NewGetT input) where NewGetT : IBaseGet<T> => input.GetQuery(Repo.Query());
-    public virtual async Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null) => await Repo.QueryPageAsync(input.GetQuery(Repo.Query()), page);
+    public virtual async Task<PageData<T>> QueryPageAsync(GetT input, PageRequest? page = null) => await Repo.QueryPageAsync(input.GetQuery(Repo.Query()), page);
+    // public virtual async Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null) => await Repo.QueryPageAsync(input.GetQuery(Repo.Query()), page);
     public virtual async Task<IEnumerable<T>> QueryAsync(GetT input) => await Repo.QueryAsync(GetQuery(input));
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : class, IBaseGet<T> => await Repo.QueryAsync(GetQuery(input));
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input) => Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryAsync(GetQuery(input)));
@@ -30,8 +30,7 @@ public class QueryRepApplication<TKey, T, GetT> : QueryRepApplication<T, GetT>, 
     {
         Repo = repository;
     }
-    public virtual async Task<T> QueryAsync(TKey id) => await Repo.GetByIdAsync(id);
+    public virtual async Task<T?> QueryAsync(TKey id) => await Repo.GetByIdAsync(id);
     public virtual async Task<IEnumerable<T>> QueryByIdsAsync(IEnumerable<TKey> ids) => await Repo.QueryAsync(ids);
-
 }
 

@@ -8,7 +8,7 @@ public interface IModifyApplication<T, CreateT> : IWriteApplication<T>, IDisposa
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    Task<T> AddAsync(CreateT entity);
+    Task<T?> AddAsync(CreateT entity);
     /// <summary>
     /// 添加(多个)
     /// </summary>
@@ -34,7 +34,7 @@ public interface INoConstraintsModifyApplication<T, CreateT> : INoConstraintsWri
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    Task<T> AddAsync(CreateT entity);
+    Task<T?> AddAsync(CreateT entity);
     /// <summary>
     /// 添加(多个)
     /// </summary>

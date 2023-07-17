@@ -19,12 +19,28 @@ public class ModifyRepController<T, CreateT> : ControllerBase, IModifyController
     /// 添加(单个)
     /// </summary>
     [HttpPost]
-    public virtual async Task<T> AddAsync([FromBody] CreateT entity) => await Repository.AddAsync(Mapper.Map<T>(entity));
+    public virtual async Task<T?> AddAsync([FromBody] CreateT entity)
+    {
+        if (entity.IsExist(Repository.Query()))
+            throw new Exception("Data Exist");
+        var data = Mapper.Map<T>(entity);
+        if (data == null)
+            return null;
+        return await Repository.AddAsync(data);
+    }
     /// <summary>
     /// 添加(多个)
     /// </summary>
     [HttpPost, Route("AddRange")]
-    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys) => await Repository.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
+    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
+    {
+        if (entitys.Any(item => item.IsExist(Repository.Query())))
+            throw new Exception("Data Exist");
+        var datas = entitys.Select(item => Mapper.Map<T>(item));
+        if (datas == null)
+            return 0;
+        return await Repository.AddAsync(datas);
+    }
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
@@ -63,7 +79,11 @@ public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, Crea
     [HttpPut, Route("{id}")]
     public virtual async Task UpdateAsync(TKey id, CreateT entity)
     {
+        if (entity.IsExist(Repository.Query()))
+            throw new Exception("Data Exist");
         var data = Mapper.Map<T>(entity);
+        if (data == null)
+            return;
         data.SetValue("Id", id);
         await Repository.UpdateAsync(data);
     }

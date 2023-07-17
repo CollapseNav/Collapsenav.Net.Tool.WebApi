@@ -19,7 +19,7 @@ public class ModifyAppController<T, CreateT> : ControllerBase, IModifyController
     /// 添加(单个)
     /// </summary>
     [HttpPost]
-    public virtual async Task<T> AddAsync([FromBody] CreateT entity) => await App.AddAsync(entity);
+    public virtual async Task<T?> AddAsync([FromBody] CreateT entity) => await App.AddAsync(entity);
     /// <summary>
     /// 添加(多个)
     /// </summary>

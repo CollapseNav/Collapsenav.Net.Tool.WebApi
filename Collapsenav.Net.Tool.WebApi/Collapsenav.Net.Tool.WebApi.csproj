@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="../version.props"/>
+    <Import Project="../version.props" />
     <PropertyGroup>
         <PackageTags>Tools,WebApi</PackageTags>
         <Description>
@@ -10,7 +10,7 @@
         <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Data\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj"/>
-        <ProjectReference Include="..\Collapsenav.Net.Tool.WebApi.Core/Collapsenav.Net.Tool.WebApi.Core.csproj"/>
+        <ProjectReference Include="..\Collapsenav.Net.Tool.WebApi.Core/Collapsenav.Net.Tool.WebApi.Core.csproj" />
+        <ProjectReference Include="..\..\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj" />
     </ItemGroup>
 </Project>

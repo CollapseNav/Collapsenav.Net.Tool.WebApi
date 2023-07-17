@@ -13,6 +13,6 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool.AutoInject\Collapsenav.Net.Tool.AutoInject.csproj" />
+    <ProjectReference Include="..\..\Collapsenav.Net.Tool.Base\Collapsenav.Net.Tool.AutoInject\Collapsenav.Net.Tool.AutoInject.csproj" />
   </ItemGroup>
 </Project>

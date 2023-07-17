@@ -11,7 +11,7 @@ public interface IWriteApplication<T> : IApplication<T>, IDisposable
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    Task<T> AddAsync(T entity);
+    Task<T?> AddAsync(T entity);
     /// <summary>
     /// 修改
     /// </summary>
@@ -38,7 +38,7 @@ public interface INoConstraintsWriteApplication<T> : INoConstraintsApplication<T
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    Task<T> AddAsync(T entity);
+    Task<T?> AddAsync(T entity);
     /// <summary>
     /// 修改
     /// </summary>

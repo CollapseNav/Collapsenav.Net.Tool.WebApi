@@ -12,7 +12,7 @@ public class AutoMap : IMap
     {
         Mapper = mapper;
     }
-    public T Map<T>(object obj)
+    public T? Map<T>(object obj)
     {
         return Mapper.Map<T>(obj);
     }
