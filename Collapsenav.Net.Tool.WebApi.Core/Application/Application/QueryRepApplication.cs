@@ -12,14 +12,28 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplica
         Repo = repository;
         Mapper = mapper;
     }
-    public virtual IQueryable<T> GetQuery(GetT input) => input.GetQuery(Repo.Query());
-    public virtual IQueryable<T> GetQuery<NewGetT>(NewGetT input) where NewGetT : IBaseGet<T> => input.GetQuery(Repo.Query());
-    public virtual async Task<PageData<T>> QueryPageAsync(GetT input, PageRequest? page = null) => await Repo.QueryPageAsync(input.GetQuery(Repo.Query()), page);
-    // public virtual async Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null) => await Repo.QueryPageAsync(input.GetQuery(Repo.Query()), page);
-    public virtual async Task<IEnumerable<T>> QueryAsync(GetT input) => await Repo.QueryAsync(GetQuery(input));
-    public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : class, IBaseGet<T> => await Repo.QueryAsync(GetQuery(input));
-    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input) => Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryAsync(GetQuery(input)));
-    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : class, IBaseGet<T> => Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryAsync(GetQuery(input)));
+    public virtual IQueryable<T> GetQuery(GetT? input)
+    {
+        return input?.GetQuery(Repo.Query()) ?? Repo.Query();
+    }
+    public virtual IQueryable<T> GetQuery<NewGetT>(NewGetT? input) where NewGetT : IBaseGet<T>
+    {
+        return input?.GetQuery(Repo.Query()) ?? Repo.Query();
+    }
+    public virtual async Task<PageData<T>> QueryPageAsync(GetT? input, PageRequest? page = null)
+    {
+        return await Repo.QueryPageAsync(input?.GetQuery(Repo.Query()), page);
+    }
+    public virtual async Task<IEnumerable<T>> QueryAsync(GetT? input) => await Repo.QueryAsync(GetQuery(input));
+    public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT? input) where NewGetT : class, IBaseGet<T> => await Repo.QueryAsync(GetQuery(input));
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT? input)
+    {
+        return Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryAsync(GetQuery(input))) ?? Enumerable.Empty<ReturnT>();
+    }
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT? input) where NewGetT : class, IBaseGet<T>
+    {
+        return Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryAsync(GetQuery(input))) ?? Enumerable.Empty<ReturnT>();
+    }
 }
 public class QueryRepApplication<TKey, T, GetT> : QueryRepApplication<T, GetT>, IQueryApplication<TKey, T, GetT>
     where T : class, IEntity<TKey>
@@ -30,7 +44,7 @@ public class QueryRepApplication<TKey, T, GetT> : QueryRepApplication<T, GetT>, 
     {
         Repo = repository;
     }
-    public virtual async Task<T?> QueryAsync(TKey id) => await Repo.GetByIdAsync(id);
-    public virtual async Task<IEnumerable<T>> QueryByIdsAsync(IEnumerable<TKey> ids) => await Repo.QueryAsync(ids);
+    public virtual async Task<T?> QueryAsync(TKey? id) => await Repo.GetByIdAsync(id);
+    public virtual async Task<IEnumerable<T>> QueryByIdsAsync(IEnumerable<TKey>? ids) => await Repo.QueryAsync(ids);
 }
 

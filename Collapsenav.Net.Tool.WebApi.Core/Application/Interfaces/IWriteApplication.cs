@@ -7,15 +7,15 @@ public interface IWriteApplication<T> : IApplication<T>, IDisposable
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
-    Task<bool> DeleteAsync(string id, bool isTrue = false);
+    Task<bool> DeleteAsync(string? id, bool isTrue = false);
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    Task<T?> AddAsync(T entity);
+    Task<T?> AddAsync(T? entity);
     /// <summary>
     /// 修改
     /// </summary>
-    Task<int> UpdateAsync(string id, T entity);
+    Task<int> UpdateAsync(string? id, T? entity);
     void Save();
     Task SaveAsync();
 }
@@ -25,7 +25,7 @@ public interface IWriteApplication<TKey, T> : IWriteApplication<T>
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
-    Task<bool> DeleteAsync(TKey id, bool isTrue = false);
+    Task<bool> DeleteAsync(TKey? id, bool isTrue = false);
 }
 
 #region 无泛型约束
@@ -34,15 +34,15 @@ public interface INoConstraintsWriteApplication<T> : INoConstraintsApplication<T
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
-    Task<bool> DeleteAsync(string id, bool isTrue = false);
+    Task<bool> DeleteAsync(string? id, bool isTrue = false);
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    Task<T?> AddAsync(T entity);
+    Task<T?> AddAsync(T? entity);
     /// <summary>
     /// 修改
     /// </summary>
-    Task<int> UpdateAsync(string id, T entity);
+    Task<int> UpdateAsync(string? id, T? entity);
     void Save();
     Task SaveAsync();
 }
@@ -51,6 +51,6 @@ public interface INoConstraintsWriteApplication<TKey, T> : INoConstraintsWriteAp
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
-    Task<bool> DeleteAsync(TKey id, bool isTrue = false);
+    Task<bool> DeleteAsync(TKey? id, bool isTrue = false);
 }
 #endregion

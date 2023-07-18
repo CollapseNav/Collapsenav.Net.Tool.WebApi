@@ -4,5 +4,5 @@ public interface IBaseCreate
 }
 public interface IBaseCreate<T> : IBaseCreate
 {
-    bool IsExist(IQueryable<T> rep);
+    bool IsExist(IQueryable<T>? rep);
 }

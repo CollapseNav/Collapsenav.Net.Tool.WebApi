@@ -10,7 +10,7 @@ public interface IReadController<T, GetT> : IController
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    Task<T?> QueryAsync(string id);
+    Task<T?> QueryAsync(string? id);
 }
 public interface IReadController<TKey, T, GetT> : IReadController<T, GetT>
     where T : IEntity<TKey>
@@ -20,7 +20,7 @@ public interface IReadController<TKey, T, GetT> : IReadController<T, GetT>
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    Task<T?> QueryAsync(TKey id);
+    Task<T?> QueryAsync(TKey? id);
 }
 
 #region 无泛型约束
@@ -30,7 +30,7 @@ public interface INoConstraintsReadController<T, GetT> : IController
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    Task<T?> QueryAsync(string id);
+    Task<T?> QueryAsync(string? id);
 }
 public interface INoConstraintsReadController<TKey, T, GetT> : INoConstraintsReadController<T, GetT>
 {
@@ -38,6 +38,6 @@ public interface INoConstraintsReadController<TKey, T, GetT> : INoConstraintsRea
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    Task<T?> QueryAsync(TKey id);
+    Task<T?> QueryAsync(TKey? id);
 }
 #endregion

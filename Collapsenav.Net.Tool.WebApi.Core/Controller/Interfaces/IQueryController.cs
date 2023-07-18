@@ -10,12 +10,12 @@ public interface IQueryController<T, GetT> : IReadController<T, GetT>
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest? page = null);
+    Task<PageData<T>> QueryPageAsync([FromQuery] GetT? input, [FromQuery] PageRequest? page = null);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
     [HttpGet, Route("Query")]
-    Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input);
+    Task<IEnumerable<T>> QueryAsync([FromQuery] GetT? input);
 }
 public interface IQueryController<TKey, T, GetT> : IReadController<TKey, T, GetT>, IQueryController<T, GetT>
     where T : IEntity<TKey>
@@ -25,12 +25,12 @@ public interface IQueryController<TKey, T, GetT> : IReadController<TKey, T, GetT
     /// 根据Id查询
     /// </summary>
     [HttpGet, Route("ByIds")]
-    Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey> ids);
+    Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey>? ids);
     /// <summary>
     /// 根据Id查询
     /// </summary>
     [HttpPost, Route("ByIds")]
-    Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey> ids);
+    Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey>? ids);
 }
 
 #region 无泛型约束
@@ -40,12 +40,12 @@ public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadCont
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest? page = null);
+    Task<PageData<T>> QueryPageAsync([FromQuery] GetT? input, [FromQuery] PageRequest? page = null);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
     [HttpGet, Route("Query")]
-    Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input);
+    Task<IEnumerable<T>> QueryAsync([FromQuery] GetT? input);
 }
 public interface INoConstraintsQueryController<TKey, T, GetT> : INoConstraintsReadController<TKey, T, GetT>, INoConstraintsQueryController<T, GetT>
 {
@@ -53,11 +53,11 @@ public interface INoConstraintsQueryController<TKey, T, GetT> : INoConstraintsRe
     /// 根据Id查询
     /// </summary>
     [HttpGet, Route("ByIds")]
-    Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey> ids);
+    Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey>? ids);
     /// <summary>
     /// 根据Id查询
     /// </summary>
     [HttpPost, Route("ByIds")]
-    Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey> ids);
+    Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey>? ids);
 }
 #endregion

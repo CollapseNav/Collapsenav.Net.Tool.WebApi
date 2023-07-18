@@ -10,7 +10,7 @@ public interface IModifyController<T, CreateT> : IWriteController<T, CreateT>, I
     /// 添加(多个)
     /// </summary>
     [HttpPost, Route("AddRange")]
-    Task<int> AddRangeAsync(IEnumerable<CreateT> entitys);
+    Task<int> AddRangeAsync(IEnumerable<CreateT>? entitys);
 }
 public interface IModifyController<TKey, T, CreateT> : IWriteController<TKey, T, CreateT>, IModifyController<T, CreateT>
     where T : IEntity<TKey>
@@ -20,7 +20,7 @@ public interface IModifyController<TKey, T, CreateT> : IWriteController<TKey, T,
     /// 删除(多个 id)
     /// </summary>
     [HttpDelete("ByIds")]
-    Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey> id, [FromQuery] bool isTrue = false);
+    Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey>? id, [FromQuery] bool isTrue = false);
 }
 
 #region 无泛型约束
@@ -30,7 +30,7 @@ public interface INoConstraintsModifyController<T, CreateT> : INoConstraintsWrit
     /// 添加(多个)
     /// </summary>
     [HttpPost, Route("AddRange")]
-    Task<int> AddRangeAsync(IEnumerable<CreateT> entitys);
+    Task<int> AddRangeAsync(IEnumerable<CreateT>? entitys);
 }
 public interface INoConstraintsModifyController<TKey, T, CreateT> : INoConstraintsWriteController<TKey, T, CreateT>, INoConstraintsModifyController<T, CreateT>
 {
@@ -38,6 +38,6 @@ public interface INoConstraintsModifyController<TKey, T, CreateT> : INoConstrain
     /// 删除(多个 id)
     /// </summary>
     [HttpDelete("ByIds")]
-    Task<int> DeleteRangeAsync(IEnumerable<TKey> id, [FromQuery] bool isTrue = false);
+    Task<int> DeleteRangeAsync(IEnumerable<TKey>? id, [FromQuery] bool isTrue = false);
 }
 #endregion
