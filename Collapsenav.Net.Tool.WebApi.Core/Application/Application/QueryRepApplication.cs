@@ -14,15 +14,15 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplica
     }
     public virtual IQueryable<T> GetQuery(GetT? input)
     {
-        return input?.GetQuery(Repo.Query()) ?? Repo.Query();
+        return input?.GetQuery(Repo) ?? Repo.Query();
     }
     public virtual IQueryable<T> GetQuery<NewGetT>(NewGetT? input) where NewGetT : IBaseGet<T>
     {
-        return input?.GetQuery(Repo.Query()) ?? Repo.Query();
+        return input?.GetQuery(Repo) ?? Repo.Query();
     }
     public virtual async Task<PageData<T>> QueryPageAsync(GetT? input, PageRequest? page = null)
     {
-        return await Repo.QueryPageAsync(input?.GetQuery(Repo.Query()), page);
+        return await Repo.QueryPageAsync(input?.GetQuery(Repo), page);
     }
     public virtual async Task<IEnumerable<T>> QueryAsync(GetT? input) => await Repo.QueryAsync(GetQuery(input));
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT? input) where NewGetT : class, IBaseGet<T> => await Repo.QueryAsync(GetQuery(input));
@@ -30,9 +30,12 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplica
     {
         return Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryAsync(GetQuery(input))) ?? Enumerable.Empty<ReturnT>();
     }
-    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT? input) where NewGetT : class, IBaseGet<T>
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(IBaseGet<T, ReturnT>? input)
     {
-        return Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryAsync(GetQuery(input))) ?? Enumerable.Empty<ReturnT>();
+        return await Task.Factory.StartNew(() =>
+        {
+            return input?.GetQuery(Repo) ?? Enumerable.Empty<ReturnT>();
+        });
     }
 }
 public class QueryRepApplication<TKey, T, GetT> : QueryRepApplication<T, GetT>, IQueryApplication<TKey, T, GetT>

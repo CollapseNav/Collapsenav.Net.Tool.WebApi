@@ -17,12 +17,12 @@ public class QueryRepController<T, GetT> : ControllerBase, IQueryController<T, G
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT? input, [FromQuery] PageRequest? page = null) => await Repository.QueryPageAsync(input?.GetQuery(Repository.Query()), page);
+    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT? input, [FromQuery] PageRequest? page = null) => await Repository.QueryPageAsync(input?.GetQuery(Repository), page);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
     [HttpGet, Route("Query")]
-    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT? input) => await Repository.QueryAsync(input?.GetQuery(Repository.Query()));
+    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT? input) => await Repository.QueryAsync(input?.GetQuery(Repository));
     /// <summary>
     /// 查找(单个 id)
     /// </summary>

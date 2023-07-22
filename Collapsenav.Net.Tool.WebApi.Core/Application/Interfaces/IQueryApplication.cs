@@ -2,7 +2,7 @@ using Collapsenav.Net.Tool.Data;
 
 namespace Collapsenav.Net.Tool.WebApi;
 public interface IQueryApplication<T, GetT> : IReadApplication<T>
-    where T : IEntity
+    where T : class, IEntity
     where GetT : IBaseGet<T>
 {
     /// <summary>
@@ -20,11 +20,11 @@ public interface IQueryApplication<T, GetT> : IReadApplication<T>
     Task<IEnumerable<T>> QueryAsync(GetT? input);
     Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT? input);
     Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT? input) where NewGetT : class, IBaseGet<T>;
-    Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT? input) where NewGetT : class, IBaseGet<T>;
+    Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(IBaseGet<T, ReturnT>? input);
 }
 public interface IQueryApplication<TKey, T, GetT> : IQueryApplication<T, GetT>,
 IReadApplication<TKey, T>
-    where T : IEntity<TKey>
+    where T : class, IEntity<TKey>
     where GetT : IBaseGet<T>
 {
     /// <summary>
@@ -48,9 +48,6 @@ public interface INoConstraintsQueryApplication<T, GetT> : INoConstraintsReadApp
     /// 列表查询
     /// </summary>
     Task<IEnumerable<T>> QueryAsync(GetT? input);
-    // Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input);
-    // Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input);
-    // Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input);
 }
 public interface INoConstraintsQueryApplication<TKey, T, GetT> : INoConstraintsQueryApplication<T, GetT>, INoConstraintsReadApplication<TKey, T>
 {

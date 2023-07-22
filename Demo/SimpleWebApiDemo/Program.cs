@@ -13,7 +13,6 @@ builder.Services.AddDefaultSwaggerGen();
 builder.Services.AddAppController();
 builder.Services.AddSqlitePool<EntityContext>(new SqliteConn("./Data.db"));
 builder.Services.AddDefaultDbContext<EntityContext>();
-builder.Services.AddAutoMapper();
 
 var app = builder.Build();
 

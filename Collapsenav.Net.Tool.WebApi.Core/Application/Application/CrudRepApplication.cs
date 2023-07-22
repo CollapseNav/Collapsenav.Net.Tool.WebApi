@@ -28,7 +28,7 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     public virtual async Task<bool> DeleteAsync(string? id, bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT? input) where NewGetT : class, IBaseGet<T> => await Read.QueryAsync(input);
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT? input) => await Read.QueryAsync<ReturnT>(input);
-    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT? input) where NewGetT : class, IBaseGet<T> => await Read.QueryAsync<NewGetT, ReturnT>(input);
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(IBaseGet<T, ReturnT>? input) => await Read.QueryAsync(input);
     public virtual async Task<T?> AddAsync(T? entity) => await Write.AddAsync(entity);
     public virtual async Task<int> UpdateAsync(string? id, T? entity) => await Write.UpdateAsync(id, entity);
     public virtual IQueryable<T> GetQuery<NewGetT>(NewGetT? input) where NewGetT : IBaseGet<T> => Read.GetQuery(input);

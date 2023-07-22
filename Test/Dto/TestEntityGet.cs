@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Collapsenav.Net.Tool.Data;
 
 namespace Collapsenav.Net.Tool.WebApi.Test;
 public class TestEntityGet : BaseGet<TestEntity>
@@ -9,9 +10,9 @@ public class TestEntityGet : BaseGet<TestEntity>
     public string Code { get; set; }
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
-    public override IQueryable<TestEntity> GetQuery(IQueryable<TestEntity> query)
+    public override IQueryable<TestEntity> GetQuery(IRepository<TestEntity> repository)
     {
-        return query
+        return repository.Query()
         .WhereIf(Id.HasValue, item => item.Id == Id)
         .WhereIf(Code, item => item.Code.Contains(Code))
         .WhereIf(Number.HasValue, item => item.Number > Number)
@@ -26,9 +27,9 @@ public class TestQueryEntityGet : BaseGet<TestQueryEntity>
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
 
-    public override IQueryable<TestQueryEntity> GetQuery(IQueryable<TestQueryEntity> query)
+    public override IQueryable<TestQueryEntity> GetQuery(IRepository<TestQueryEntity> repository)
     {
-        return query
+        return repository.Query()
         .WhereIf(Id.HasValue, item => item.Id == Id)
         .WhereIf(Code, item => item.Code.Contains(Code))
         .WhereIf(Number.HasValue, item => item.Number > Number)
@@ -44,9 +45,9 @@ public class TestModifyEntityGet : BaseGet<TestModifyEntity>
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
 
-    public override IQueryable<TestModifyEntity> GetQuery(IQueryable<TestModifyEntity> query)
+    public override IQueryable<TestModifyEntity> GetQuery(IRepository<TestModifyEntity> query)
     {
-        return query
+        return query.Query()
         .WhereIf(Id.HasValue, item => item.Id == Id)
         .WhereIf(Code, item => item.Code.Contains(Code))
         .WhereIf(Number.HasValue, item => item.Number > Number)
@@ -62,9 +63,9 @@ public class TestNotBaseEntityGet : BaseGet<TestNotBaseEntity>
     public string Code { get; set; }
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
-    public override IQueryable<TestNotBaseEntity> GetQuery(IQueryable<TestNotBaseEntity> query)
+    public override IQueryable<TestNotBaseEntity> GetQuery(IRepository<TestNotBaseEntity> query)
     {
-        return query
+        return query.Query()
         .WhereIf(Id.HasValue, item => item.Id == Id)
         .WhereIf(Code, item => item.Code.Contains(Code))
         .WhereIf(Number.HasValue, item => item.Number > Number)
@@ -79,9 +80,9 @@ public class TestNotBaseQueryEntityGet : BaseGet<TestNotBaseQueryEntity>
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
 
-    public override IQueryable<TestNotBaseQueryEntity> GetQuery(IQueryable<TestNotBaseQueryEntity> query)
+    public override IQueryable<TestNotBaseQueryEntity> GetQuery(IRepository<TestNotBaseQueryEntity> query)
     {
-        return query
+        return query.Query()
         .WhereIf(Id.HasValue, item => item.Id == Id)
         .WhereIf(Code, item => item.Code.Contains(Code))
         .WhereIf(Number.HasValue, item => item.Number > Number)
@@ -96,9 +97,9 @@ public class TestNotBaseModifyEntityGet : BaseGet<TestNotBaseModifyEntity>
     public string Code { get; set; }
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
-    public override IQueryable<TestNotBaseModifyEntity> GetQuery(IQueryable<TestNotBaseModifyEntity> query)
+    public override IQueryable<TestNotBaseModifyEntity> GetQuery(IRepository<TestNotBaseModifyEntity> query)
     {
-        return query
+        return query.Query()
         .WhereIf(Id.HasValue, item => item.Id == Id)
         .WhereIf(Code, item => item.Code.Contains(Code))
         .WhereIf(Number.HasValue, item => item.Number > Number)

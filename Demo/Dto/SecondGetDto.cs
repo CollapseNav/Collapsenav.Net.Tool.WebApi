@@ -1,5 +1,5 @@
-using System.Linq.Expressions;
 using Collapsenav.Net.Tool;
+using Collapsenav.Net.Tool.Data;
 using Collapsenav.Net.Tool.WebApi;
 using DataDemo.EntityLib;
 
@@ -12,9 +12,9 @@ public class SecondGetDto : BaseGet<SecondEntity>
     public int? Age { get; set; }
     public string Description { get; set; }
 
-    public override IQueryable<SecondEntity> GetQuery(IQueryable<SecondEntity> query)
+    public override IQueryable<SecondEntity> GetQuery(IRepository<SecondEntity> query)
     {
-        return query
+        return query.Query()
         .WhereIf(Name, item => item.Name.Contains(Name))
         ;
     }
@@ -27,9 +27,9 @@ public class SecondGetDto2 : BaseGet<SecondEntity>
     public int? Age { get; set; }
     public string Description { get; set; }
 
-    public override IQueryable<SecondEntity> GetQuery(IQueryable<SecondEntity> query)
+    public override IQueryable<SecondEntity> GetQuery(IRepository<SecondEntity> query)
     {
-        return query
+        return query.Query()
         .WhereIf(Name, item => item.Name.Contains(Name))
         ;
     }

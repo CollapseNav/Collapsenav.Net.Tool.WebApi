@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
 public interface IReadController<T, GetT> : IController
-    where T : IEntity
+    where T : class, IEntity
     where GetT : IBaseGet<T>
 {
     /// <summary>
@@ -13,7 +13,7 @@ public interface IReadController<T, GetT> : IController
     Task<T?> QueryAsync(string? id);
 }
 public interface IReadController<TKey, T, GetT> : IReadController<T, GetT>
-    where T : IEntity<TKey>
+    where T : class, IEntity<TKey>
     where GetT : IBaseGet<T>
 {
     /// <summary>

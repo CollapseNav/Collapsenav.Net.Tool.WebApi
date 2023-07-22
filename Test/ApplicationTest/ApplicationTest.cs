@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Collapsenav.Net.Tool.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -37,9 +38,9 @@ public class ApplicationTest
 
     public class NewGetInput : BaseGet<TestEntity>
     {
-        public override IQueryable<TestEntity> GetQuery(IQueryable<TestEntity> query)
+        public override IQueryable<TestEntity> GetQuery(IRepository<TestEntity> query)
         {
-            return query;
+            return query.Query();
         }
     }
 
@@ -51,14 +52,6 @@ public class ApplicationTest
         Assert.True(data.Count() == 10);
 
         data = await app.GetQuery(new NewGetInput()).ToListAsync();
-        Assert.True(data.Count() == 10);
-    }
-
-    [Fact]
-    public async Task NewGetInputMapQueryTest()
-    {
-        var app = GetService<ICrudApplication<int, TestEntity, TestEntityCreate, TestEntityGet>>();
-        var data = await app.QueryAsync<NewGetInput, TestEntityReturnDto>(new NewGetInput());
         Assert.True(data.Count() == 10);
     }
 

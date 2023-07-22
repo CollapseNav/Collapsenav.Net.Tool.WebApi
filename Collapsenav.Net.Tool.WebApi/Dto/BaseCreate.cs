@@ -5,5 +5,5 @@ public class BaseCreate : IBaseCreate
 }
 public class BaseCreate<T> : BaseCreate, IBaseCreate<T>
 {
-    public virtual bool IsExist(IQueryable<T> rep) => false;
+    public virtual bool IsExist(IQueryable<T>? rep) => false;
 }
