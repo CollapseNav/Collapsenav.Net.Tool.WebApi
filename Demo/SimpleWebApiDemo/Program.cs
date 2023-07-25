@@ -15,7 +15,7 @@ builder.Services.AddSqlitePool<EntityContext>(new SqliteConn("./Data.db"));
 builder.Services.AddDefaultDbContext<EntityContext>();
 
 var app = builder.Build();
-
+app.UseAutoCommit();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

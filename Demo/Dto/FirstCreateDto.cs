@@ -4,7 +4,6 @@ using DataDemo.EntityLib;
 
 namespace SimpleWebApiDemo;
 
-
 public class FirstCreateDto : BaseCreate<FirstEntity>
 {
     public long? Id { get; set; }

@@ -1,8 +1,8 @@
 using Collapsenav.Net.Tool.WebApi;
 using DataDemo.EntityLib;
-using Microsoft.AspNetCore.Mvc;
+using SimpleWebApiDemo;
 
-namespace SimpleWebApiDemo.Controllers;
+namespace EmitDynamicApiDemo.Controllers;
 
 /// <summary>
 /// 添加一个可以增删改查的 controller
@@ -11,12 +11,5 @@ public class FirstCrudController : CrudAppController<FirstEntity, FirstCreateDto
 {
     public FirstCrudController(ICrudApplication<FirstEntity, FirstCreateDto, FirstGetDto> app, IMap mapper) : base(app, mapper)
     {
-    }
-
-    [HttpGet("joinmodel")]
-    public async Task<IEnumerable<ReturnModel>> JoinModel([FromQuery] FirstJoinGetDto input)
-    {
-        var data = await App.QueryAsync(input);
-        return data;
     }
 }

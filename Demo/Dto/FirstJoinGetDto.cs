@@ -24,6 +24,6 @@ public class FirstJoinGetDto : BaseJoinGet<FirstEntity, ReturnModel>
 public class ReturnModel
 {
     public long? Id { get; set; }
-    public string? Name { get; set; }
-    public string? Age { get; set; }
+    public string Name { get; set; }
+    public string Age { get; set; }
 }
