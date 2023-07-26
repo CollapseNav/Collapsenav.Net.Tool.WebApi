@@ -1,15 +1,26 @@
-using Collapsenav.Net.Tool.WebApi;
+using Collapsenav.Net.Tool.Data;
 using DataDemo.EntityLib;
-using SimpleWebApiDemo;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmitDynamicApiDemo.Controllers;
 
-/// <summary>
-/// 添加一个可以增删改查的 controller
-/// </summary>
-public class FirstCrudController : CrudAppController<FirstEntity, FirstCreateDto, FirstGetDto>
+[Route("testdy")]
+public class FirstCrudController : ControllerBase
 {
-    public FirstCrudController(ICrudApplication<FirstEntity, FirstCreateDto, FirstGetDto> app, IMap mapper) : base(app, mapper)
+    private readonly IModifyRepository<FirstEntity> firstRepo;
+    private readonly IModifyRepository<SecondEntity> secondRepo;
+
+    public FirstCrudController(IModifyRepository<FirstEntity> firstRepo, IModifyRepository<SecondEntity> secondRepo)
     {
+        this.firstRepo = firstRepo;
+        this.secondRepo = secondRepo;
+    }
+    [HttpGet("wtf")]
+    public async Task<int> GetDD()
+    {
+        await firstRepo.AddAsync(new FirstEntity { });
+        throw new Exception();
+        await secondRepo.AddAsync(new SecondEntity { });
+        return 10;
     }
 }

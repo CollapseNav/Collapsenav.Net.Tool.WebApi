@@ -30,6 +30,16 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     /// </summary>
     [HttpGet, Route("{id}")]
     public virtual async Task<T?> QueryAsync(string? id) => await App.QueryByStringIdAsync(id);
+
+    public async Task<PageData<ReturnT>> QueryPageAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input, [FromQuery] PageRequest? page = null)
+    {
+        return await App.QueryPageAsync(input, page);
+    }
+
+    public async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input)
+    {
+        return await App.QueryAsync(input);
+    }
 }
 [ApiController]
 [Route("[controller]")]

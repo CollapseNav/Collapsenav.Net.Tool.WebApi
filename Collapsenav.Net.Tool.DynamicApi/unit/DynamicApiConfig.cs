@@ -162,7 +162,21 @@ public class DynamicApiConfig
                 return;
             action.Selectors.Clear();
             action.Selectors.Add(selector);
-            if (!action.Selectors.HasActionAttribute())
+            if (action.HasRouteAttribute())
+            {
+                var routeattr = action.Attributes.First(i => i.GetType() == typeof(RouteAttribute)) as RouteAttribute;
+                actionName = routeattr?.Template ?? string.Empty;
+                if (action.Attributes.Any(i => i is HttpGetAttribute))
+                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { "GET" }));
+                else if (action.Attributes.Any(i => i is HttpPostAttribute))
+                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { "POST" }));
+                else if (action.Attributes.Any(i => i is HttpPutAttribute))
+                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { "PUT" }));
+                else if (action.Attributes.Any(i => i is HttpDeleteAttribute))
+                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { "DELETE" }));
+
+            }
+            else if (!action.Selectors.HasActionAttribute())
                 selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { GetHttpMethod(actionName) }));
             actionName = Remove(actionName);
             route.Append($"{(route.Length > 0 ? "/" : "")}{actionName}");

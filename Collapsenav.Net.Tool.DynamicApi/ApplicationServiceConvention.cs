@@ -1,11 +1,14 @@
 using System.Reflection;
+using Collapsenav.Net.Tool.WebApi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Collapsenav.Net.Tool.DynamicApi;
 public class ApplicationServiceConvention : IApplicationModelConvention
 {
-    public static List<Type> Types = new List<Type>();
+    public static List<Type> Types = new();
+    public static List<Type> GetTypes = new();
     public void Apply(ApplicationModel application)
     {
         foreach (var controller in application.Controllers)
@@ -37,6 +40,45 @@ public class ApplicationServiceConvention : IApplicationModelConvention
                 continue;
             var am = new ActionModel(action, action.GetCustomAttributes().ToList());
             am.ActionName = action.Name;
+            foreach (var p in action.GetParameters())
+            {
+                var pm = new ParameterModel(p, p.GetCustomAttributes().ToList());
+                pm.ParameterName = p.Name;
+                pm.Action = am;
+                var bi = BindingInfo.GetBindingInfo(p.GetCustomAttributes());
+                pm.BindingInfo = bi;
+                am.Parameters.Add(pm);
+            }
+            am.Controller = cm;
+            cm.Actions.Add(am);
+        }
+        var ms = cm.ControllerType.GetMethods().Where(item => item.IsGenericMethod && item.DeclaringType.IsType<IController>());
+        foreach (var (value, index) in ms.SelectWithIndex())
+        {
+            var m = value.MakeGenericMethod(GetTypes.First());
+            var am = new ActionModel(m, new object[] { new RouteAttribute($"get{index}"), new HttpGetAttribute() }.ToList());
+            am.ActionName = $"get{index}";
+            foreach (var p in m.GetParameters())
+            {
+                if (p.ParameterType.IsType<IBaseGet>())
+                {
+                    // var pm = new ParameterModel(GetTypes.First(), p.GetCustomAttributes().ToList());
+                    // pm.ParameterName = p.Name;
+                    // pm.Action = am;
+                    // var bi = BindingInfo.GetBindingInfo(p.GetCustomAttributes());
+                    // pm.BindingInfo = bi;
+                    // am.Parameters.Add(pm);
+                }
+                else
+                {
+                    var pm = new ParameterModel(p, p.GetCustomAttributes().ToList());
+                    pm.ParameterName = p.Name;
+                    pm.Action = am;
+                    var bi = BindingInfo.GetBindingInfo(p.GetCustomAttributes());
+                    pm.BindingInfo = bi;
+                    am.Parameters.Add(pm);
+                }
+            }
             am.Controller = cm;
             cm.Actions.Add(am);
         }
@@ -59,7 +101,7 @@ public class ApplicationServiceConvention : IApplicationModelConvention
         {
             // 创建 action route
             action.BuildRoute();
-            if (action.Selectors.First().EndpointMetadata.IsEmpty())
+            if (action.Selectors.NotEmpty() && action.Selectors.First().EndpointMetadata.IsEmpty())
             {
                 var attrs = action.Attributes.ToList();
                 action.Selectors.First().EndpointMetadata.AddRange(attrs.Take(3).ToList());

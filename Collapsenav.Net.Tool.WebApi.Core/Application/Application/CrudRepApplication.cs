@@ -32,6 +32,11 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     public virtual async Task<T?> AddAsync(T? entity) => await Write.AddAsync(entity);
     public virtual async Task<int> UpdateAsync(string? id, T? entity) => await Write.UpdateAsync(id, entity);
     public virtual IQueryable<T> GetQuery<NewGetT>(NewGetT? input) where NewGetT : IBaseGet<T> => Read.GetQuery(input);
+
+    public virtual async Task<PageData<ReturnT>> QueryPageAsync<ReturnT>(IBaseGet<T, ReturnT>? input, PageRequest? page = null)
+    {
+        return await Read.QueryPageAsync(input, page);
+    }
 }
 public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, CreateT, GetT>, ICrudApplication<TKey, T, CreateT, GetT>
     where T : class, IEntity<TKey>

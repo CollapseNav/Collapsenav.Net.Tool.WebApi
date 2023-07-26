@@ -24,6 +24,10 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplica
     {
         return await Repo.QueryPageAsync(input?.GetQuery(Repo), page);
     }
+    public virtual async Task<PageData<ReturnT>> QueryPageAsync<ReturnT>(IBaseGet<T, ReturnT>? input, PageRequest? page = null)
+    {
+        return await Repo.QueryPageAsync(input?.GetQuery(Repo), page);
+    }
     public virtual async Task<IEnumerable<T>> QueryAsync(GetT? input) => await Repo.QueryAsync(GetQuery(input));
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT? input) where NewGetT : class, IBaseGet<T> => await Repo.QueryAsync(GetQuery(input));
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT? input)
@@ -37,6 +41,7 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplica
             return input?.GetQuery(Repo) ?? Enumerable.Empty<ReturnT>();
         });
     }
+
 }
 public class QueryRepApplication<TKey, T, GetT> : QueryRepApplication<T, GetT>, IQueryApplication<TKey, T, GetT>
     where T : class, IEntity<TKey>

@@ -28,6 +28,16 @@ public class QueryRepController<T, GetT> : ControllerBase, IQueryController<T, G
     /// </summary>
     [HttpGet, Route("{id}")]
     public virtual async Task<T?> QueryAsync(string? id) => await Repository.GetByIdAsync(id);
+
+    public virtual async Task<PageData<ReturnT>> QueryPageAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input, [FromQuery] PageRequest? page = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input)
+    {
+        throw new NotImplementedException();
+    }
 }
 [ApiController]
 [Route("[controller]")]

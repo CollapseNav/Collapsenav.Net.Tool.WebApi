@@ -51,6 +51,16 @@ public class CrudAppController<T, CreateT, GetT> : ControllerBase, ICrudControll
     /// </summary>
     [HttpDelete, Route("{id}")]
     public virtual async Task DeleteAsync(string? id, [FromQuery] bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
+
+    public virtual async Task<PageData<ReturnT>> QueryPageAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input, [FromQuery] PageRequest? page = null)
+    {
+        return await Read.QueryPageAsync(input, page);
+    }
+
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input)
+    {
+        return await Read.QueryAsync(input);
+    }
 }
 [ApiController]
 [Route("[controller]")]

@@ -16,6 +16,7 @@ public class SecondGetDto : BaseGet<SecondEntity>
     {
         return query.Query()
         .WhereIf(Name, item => item.Name.Contains(Name))
+        .Where(item => item.IsDeleted == false)
         ;
     }
 }
@@ -31,6 +32,7 @@ public class SecondGetDto2 : BaseGet<SecondEntity>
     {
         return query.Query()
         .WhereIf(Name, item => item.Name.Contains(Name))
+        .Where(item => item.IsDeleted == false)
         ;
     }
 }

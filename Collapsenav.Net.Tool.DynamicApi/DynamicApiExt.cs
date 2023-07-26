@@ -73,6 +73,12 @@ public static class DynamicApiExt
     {
         controller.Selectors.RemoveEmptySelector();
     }
+    public static bool HasRouteAttribute(this ActionModel action)
+    {
+        if (action.Attributes.Any(item => item.GetType() == typeof(RouteAttribute)))
+            return true;
+        return action.Selectors.HasRouteAttribute();
+    }
     /// <summary>
     /// 判断是否有自定义的 route
     /// </summary>
