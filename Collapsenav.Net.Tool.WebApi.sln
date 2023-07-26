@@ -29,8 +29,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityLib", "Demo\EntityLib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWebApiDemo", "Demo\SimpleWebApiDemo\SimpleWebApiDemo.csproj", "{86F8D76E-628A-44F1-9247-2FCCD67BA1D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.DynamicApi.WebApi", "Collapsenav.Net.Tool.DynamicApi.WebApi\Collapsenav.Net.Tool.DynamicApi.WebApi.csproj", "{FFE17861-7C37-4B70-9D87-AFA30CBAD1AD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,10 +86,6 @@ Global
 		{86F8D76E-628A-44F1-9247-2FCCD67BA1D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86F8D76E-628A-44F1-9247-2FCCD67BA1D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86F8D76E-628A-44F1-9247-2FCCD67BA1D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFE17861-7C37-4B70-9D87-AFA30CBAD1AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFE17861-7C37-4B70-9D87-AFA30CBAD1AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFE17861-7C37-4B70-9D87-AFA30CBAD1AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFE17861-7C37-4B70-9D87-AFA30CBAD1AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{06621F0C-0AFE-454B-8B8F-00CFFDAB7B03} = {D55B8CE6-6972-45A6-832C-466197A80A65}

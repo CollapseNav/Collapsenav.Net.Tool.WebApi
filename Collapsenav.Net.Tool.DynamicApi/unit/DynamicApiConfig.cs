@@ -7,6 +7,7 @@ namespace Collapsenav.Net.Tool.DynamicApi;
 
 public class DynamicApiConfig
 {
+    public static DynamicApiConfig? GlobalConfig { get; set; }
     public string? GlobalPrefix { get; set; }
     public List<string> GetPrefix { get; set; } = new();
     public List<string> PostPrefix { get; set; } = new();

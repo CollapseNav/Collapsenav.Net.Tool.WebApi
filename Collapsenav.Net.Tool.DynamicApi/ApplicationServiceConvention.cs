@@ -7,29 +7,37 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace Collapsenav.Net.Tool.DynamicApi;
 public class ApplicationServiceConvention : IApplicationModelConvention
 {
-    public static List<Type> Types = new();
-    public static List<Type> GetTypes = new();
+    /// <summary>
+    /// 需要动态构建路由的controller类型，一般来说是泛型类
+    /// </summary>
+    public static List<DynamicController> DynamicControllers = new();
     public void Apply(ApplicationModel application)
     {
         foreach (var controller in application.Controllers)
         {
             if (controller.ControllerType.IsDynamicApi())
-                ConfigureApplicationService(controller);
+                DynamicControllers.Add(new DynamicController(controller));
+            // ConfigureApplicationService(controller);
         }
-        foreach (var type in Types)
+        foreach (var con in DynamicControllers)
         {
-            var cm = new ControllerModel(type.GetTypeInfo(), type.GetCustomAttributes().ToList());
-            cm.ControllerName = "testdy";
-            CreateActionModel(cm);
-            ConfigureApplicationService(cm);
-            cm.Filters.Add(new ApiControllerAttribute());
-            cm.Selectors.First().EndpointMetadata.AddRange(cm.Attributes.ToList());
-            foreach (var prop in type.Props())
-            {
-                cm.ControllerProperties.Add(new PropertyModel(prop, prop.GetCustomAttributes().ToList()));
-            }
-            application.Controllers.Add(cm);
+            con.GetControllerModel(application);
         }
+        // DynamicControllers.Clear();
+        // foreach (var type in Types)
+        // {
+        //     var cm = new ControllerModel(type.GetTypeInfo(), type.GetCustomAttributes().ToList());
+        //     cm.ControllerName = "testdy";
+        //     CreateActionModel(cm);
+        //     ConfigureApplicationService(cm);
+        //     // cm.Filters.Add(new ApiControllerAttribute());
+        //     // cm.Selectors.First().EndpointMetadata.AddRange(cm.Attributes.ToList());
+        //     // foreach (var prop in type.Props())
+        //     // {
+        //     //     cm.ControllerProperties.Add(new PropertyModel(prop, prop.GetCustomAttributes().ToList()));
+        //     // }
+        //     application.Controllers.Add(cm);
+        // }
     }
 
     private void CreateActionModel(ControllerModel cm)
@@ -52,36 +60,36 @@ public class ApplicationServiceConvention : IApplicationModelConvention
             am.Controller = cm;
             cm.Actions.Add(am);
         }
-        var ms = cm.ControllerType.GetMethods().Where(item => item.IsGenericMethod && item.DeclaringType.IsType<IController>());
-        foreach (var (value, index) in ms.SelectWithIndex())
-        {
-            var m = value.MakeGenericMethod(GetTypes.First());
-            var am = new ActionModel(m, new object[] { new RouteAttribute($"get{index}"), new HttpGetAttribute() }.ToList());
-            am.ActionName = $"get{index}";
-            foreach (var p in m.GetParameters())
-            {
-                if (p.ParameterType.IsType<IBaseGet>())
-                {
-                    // var pm = new ParameterModel(GetTypes.First(), p.GetCustomAttributes().ToList());
-                    // pm.ParameterName = p.Name;
-                    // pm.Action = am;
-                    // var bi = BindingInfo.GetBindingInfo(p.GetCustomAttributes());
-                    // pm.BindingInfo = bi;
-                    // am.Parameters.Add(pm);
-                }
-                else
-                {
-                    var pm = new ParameterModel(p, p.GetCustomAttributes().ToList());
-                    pm.ParameterName = p.Name;
-                    pm.Action = am;
-                    var bi = BindingInfo.GetBindingInfo(p.GetCustomAttributes());
-                    pm.BindingInfo = bi;
-                    am.Parameters.Add(pm);
-                }
-            }
-            am.Controller = cm;
-            cm.Actions.Add(am);
-        }
+        // var ms = cm.ControllerType.GetMethods().Where(item => item.IsGenericMethod && item.DeclaringType.IsType<IController>());
+        // foreach (var (value, index) in ms.SelectWithIndex())
+        // {
+        //     var m = value.MakeGenericMethod(GetTypes.First());
+        //     var am = new ActionModel(m, new object[] { new RouteAttribute($"get{index}"), new HttpGetAttribute() }.ToList());
+        //     am.ActionName = $"get{index}";
+        //     foreach (var p in m.GetParameters())
+        //     {
+        //         if (p.ParameterType.IsType<IBaseGet>())
+        //         {
+        //             // var pm = new ParameterModel(GetTypes.First(), p.GetCustomAttributes().ToList());
+        //             // pm.ParameterName = p.Name;
+        //             // pm.Action = am;
+        //             // var bi = BindingInfo.GetBindingInfo(p.GetCustomAttributes());
+        //             // pm.BindingInfo = bi;
+        //             // am.Parameters.Add(pm);
+        //         }
+        //         else
+        //         {
+        //             var pm = new ParameterModel(p, p.GetCustomAttributes().ToList());
+        //             pm.ParameterName = p.Name;
+        //             pm.Action = am;
+        //             var bi = BindingInfo.GetBindingInfo(p.GetCustomAttributes());
+        //             pm.BindingInfo = bi;
+        //             am.Parameters.Add(pm);
+        //         }
+        //     }
+        //     am.Controller = cm;
+        //     cm.Actions.Add(am);
+        // }
     }
 
     private static void ConfigureApplicationService(ControllerModel controller)

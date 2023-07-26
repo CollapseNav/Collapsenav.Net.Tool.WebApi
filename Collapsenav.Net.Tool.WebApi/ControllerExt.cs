@@ -32,7 +32,7 @@ public static class ControllerExt
         .AddScoped(typeof(IQueryController<,,>), typeof(QueryRepController<,,>))
         .AddScoped(typeof(ICrudController<,,,>), typeof(CrudRepController<,,,>))
         .AddMap()
-        .AddDynamicController()
+        // .AddDynamicController()
         ;
         return services;
     }
@@ -51,7 +51,7 @@ public static class ControllerExt
         .AddScoped(typeof(IQueryController<,,>), typeof(QueryAppController<,,>))
         .AddScoped(typeof(ICrudController<,,,>), typeof(CrudAppController<,,,>))
         .AddMap()
-        .AddDynamicController()
+        // .AddDynamicController()
         ;
         return services;
     }
