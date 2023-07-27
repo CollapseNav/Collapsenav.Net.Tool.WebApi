@@ -31,7 +31,7 @@ public class SecondGetDto2 : BaseGet<SecondEntity>
     public override IQueryable<SecondEntity> GetQuery(IRepository<SecondEntity> query)
     {
         return query.Query()
-        .WhereIf(Name, item => item.Name.Contains(Name))
+        .WhereIf(Name, item => item.Name == Name)
         .Where(item => item.IsDeleted == false)
         ;
     }

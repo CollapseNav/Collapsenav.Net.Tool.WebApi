@@ -1,4 +1,5 @@
 using System.Reflection;
+using Collapsenav.Net.Tool.WebApi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
@@ -69,5 +70,23 @@ public class DynamicController
             applicationModel.Controllers.Add(cm);
         }
         return cm;
+    }
+
+    public DynamicController AddGetAction<T>(string route) where T : class, IBaseGet
+    {
+        var type = typeof(T);
+        var interfaces = type.GetInterfaces().Where(item => item.IsGenericType && item.GenericTypeArguments.Length == 2).ToArray();
+        if (interfaces.IsEmpty())
+            return this;
+        var inter = interfaces.FirstOrDefault()!;
+        var GenericTypeArguments = inter.GenericTypeArguments;
+        var genMethods = ControllerType?.GetMethods().Where(item => item.IsGenericMethod && item.DeclaringType!.IsType<IController>()).ToArray();
+        if (genMethods == null || genMethods.IsEmpty())
+            return this;
+        var t = genMethods.Last().MakeGenericMethod(type, GenericTypeArguments.Last());
+        var am = new DynamicAction(t, route);
+        am.ExtraAttributes.Add(new HttpPostAttribute());
+        Actions.Add(am);
+        return this;
     }
 }

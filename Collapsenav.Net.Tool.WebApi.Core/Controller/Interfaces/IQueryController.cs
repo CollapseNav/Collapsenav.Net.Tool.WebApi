@@ -19,11 +19,11 @@ public interface IQueryController<T, GetT> : IReadController<T, GetT>
     /// <summary>
     /// 带条件分页
     /// </summary>
-    Task<PageData<ReturnT>> QueryPageAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input, [FromQuery] PageRequest? page = null);
+    Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null) where NewGetT : IBaseGet<T, ReturnT>;
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
-    Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input);
+    Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input) where NewGetT : IBaseGet<T, ReturnT>;
 }
 public interface IQueryController<TKey, T, GetT> : IReadController<TKey, T, GetT>, IQueryController<T, GetT>
     where T : class, IEntity<TKey>

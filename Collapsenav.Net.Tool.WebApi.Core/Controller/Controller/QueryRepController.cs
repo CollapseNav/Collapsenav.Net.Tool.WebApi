@@ -29,12 +29,12 @@ public class QueryRepController<T, GetT> : ControllerBase, IQueryController<T, G
     [HttpGet, Route("{id}")]
     public virtual async Task<T?> QueryAsync(string? id) => await Repository.GetByIdAsync(id);
 
-    public virtual async Task<PageData<ReturnT>> QueryPageAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input, [FromQuery] PageRequest? page = null)
+    public virtual async Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null) where NewGetT : IBaseGet<T, ReturnT>
     {
         throw new NotImplementedException();
     }
 
-    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>([FromQuery] IBaseGet<T, ReturnT>? input)
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input) where NewGetT : IBaseGet<T, ReturnT>
     {
         throw new NotImplementedException();
     }

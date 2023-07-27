@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Security.Principal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -8,13 +7,12 @@ namespace Collapsenav.Net.Tool.DynamicApi;
 
 public class DynamicAction
 {
-    private readonly ActionModel actionModel;
+    private readonly ActionModel? actionModel;
 
     public DynamicApiConfig? Config { get; set; } = DynamicApiConfig.GlobalConfig;
-    public DynamicAction(ActionModel actionModel)
+    public DynamicAction(ActionModel actionModel) : this(actionModel.ActionMethod)
     {
         this.actionModel = actionModel;
-        MethodInfo = actionModel.ActionMethod;
     }
     public DynamicAction(MethodInfo methodInfo)
     {
@@ -28,6 +26,7 @@ public class DynamicAction
 
     public static DynamicAction? GetDynamicAction(MethodInfo info)
     {
+        // 只接受4种httpmethod
         if (!info.HasAttribute(typeof(HttpGetAttribute), typeof(HttpPostAttribute), typeof(HttpPutAttribute), typeof(HttpDeleteAttribute)))
             return null;
         return new DynamicAction(info);
@@ -35,25 +34,27 @@ public class DynamicAction
 
     public MethodInfo? MethodInfo { get; }
     public RouteAttribute? Route { get; set; }
+    public List<Attribute> ExtraAttributes { get; } = new();
 
     public ActionModel? GetActionModel(ControllerModel? controllerModel = null)
     {
         if (MethodInfo == null)
             return null;
         var attrs = MethodInfo.GetCustomAttributes().ToList();
-        if (Route == null)
-            Route = attrs.FirstOrDefault(i => i is RouteAttribute) as RouteAttribute;
+        Route ??= attrs.FirstOrDefault(i => i is RouteAttribute) as RouteAttribute;
         var action = actionModel ?? new ActionModel(MethodInfo, MethodInfo.GetCustomAttributes().ToList())
         {
             ActionName = Route?.Template ?? MethodInfo.Name
         };
         foreach (var p in MethodInfo.GetParameters())
         {
-            var pm = new ParameterModel(p, p.GetCustomAttributes().ToList());
-            pm.ParameterName = p.Name ?? string.Empty;
-            pm.Action = action;
             var bi = BindingInfo.GetBindingInfo(p.GetCustomAttributes());
-            pm.BindingInfo = bi;
+            var pm = new ParameterModel(p, p.GetCustomAttributes().ToList())
+            {
+                ParameterName = p.Name ?? string.Empty,
+                Action = action,
+                BindingInfo = bi
+            };
             action.Parameters.Add(pm);
         }
         Config?.ConfigActionRoute(action);

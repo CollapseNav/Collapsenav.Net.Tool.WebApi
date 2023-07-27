@@ -50,9 +50,10 @@ public static class DynamicApiExt
         return builder;
     }
 
-    public static IServiceCollection AddController<T>(this IServiceCollection services, string route)
+    public static DynamicController AddController<T>(this IServiceCollection services, string route)
     {
-        ApplicationServiceConvention.DynamicControllers.Add(new DynamicController(typeof(T), route));
-        return services;
+        var dc = new DynamicController(typeof(T), route);
+        ApplicationServiceConvention.DynamicControllers.Add(dc);
+        return dc;
     }
 }
