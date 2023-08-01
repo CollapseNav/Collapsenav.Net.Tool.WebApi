@@ -1,24 +1,43 @@
 using Collapsenav.Net.Tool;
+using Collapsenav.Net.Tool.AutoInject;
 using Collapsenav.Net.Tool.Data;
+using Collapsenav.Net.Tool.DynamicApi;
 using Collapsenav.Net.Tool.WebApi;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
-// var builder = WebApplication.CreateBuilder(args);
-// builder.Services.AddDynamicWebApi().AddRepController().AddAppController();
-// builder.Services.AddController<CrudAppController<long, FirstEntity, FirstCreateDto, FirstGetDto>>("testdy")
-// .AddGetAction<FirstJoinGetDto>("QueryNew")
-// .AddGetAction<FirstJoinGetDto2>("QueryTTTT")
-// ;
-// builder.Services.AddDefaultSwaggerGen();
-// builder.Services.AddSqlitePool<EntityContext>(new SqliteConn("./Data.db"));
-// builder.Services.AddDefaultDbContext<EntityContext>();
-// var app = builder.Build();
-// app.UseAutoCommit();
-// if (app.Environment.IsDevelopment())
-//     app.UseSwagger().UseSwaggerUI();
-// app.MapControllers();
-// app.Run();
-Console.WriteLine(new FirstEntity().Pad(20, item => item, '#'));
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseAutoInjectProviderFactory();
+builder.Services.AddControllers().AddControllersAsServices();
+builder.Services.AddDynamicWebApi().AddRepController().AddAppController();
+builder.Services.AddController<CrudAppController<long, FirstEntity, FirstCreateDto, FirstGetDto>>("testdy")
+.AddGetAction<FirstJoinGetDto>("QueryNew")
+.AddGetAction<FirstJoinGetDto2>("QueryTTTT")
+;
+builder.Services.AddDefaultSwaggerGen();
+builder.Services.AddSqlitePool<EntityContext>(new SqliteConn("./Data.db"));
+builder.Services.AddDefaultDbContext<EntityContext>();
+builder.Services.AddAutoInjectController();
+var app = builder.Build();
+app.UseAutoCommit();
+if (app.Environment.IsDevelopment()) app.UseSwagger().UseSwaggerUI();
+app.MapControllers();
+app.Run();
+
+[DynamicApi]
+public class TestApi
+{
+    public IRepository<FirstEntity> FirstRepo { get; set; }
+    public TestApi(IRepository<FirstEntity> firstRepo)
+    {
+        FirstRepo = firstRepo;
+    }
+
+    public string QueryBBBB()
+    {
+        Console.WriteLine(FirstRepo == null);
+        return "123";
+    }
+}
 
 
 #region dfoasdjf

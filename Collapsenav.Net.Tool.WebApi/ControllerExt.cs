@@ -50,6 +50,12 @@ public static class ControllerExt
         .AddScoped(typeof(IModifyController<,,>), typeof(ModifyAppController<,,>))
         .AddScoped(typeof(IQueryController<,,>), typeof(QueryAppController<,,>))
         .AddScoped(typeof(ICrudController<,,,>), typeof(CrudAppController<,,,>))
+        .AddScoped(typeof(ModifyAppController<,>))
+        .AddScoped(typeof(QueryAppController<,>))
+        .AddScoped(typeof(CrudAppController<,,>))
+        .AddScoped(typeof(ModifyAppController<,,>))
+        .AddScoped(typeof(QueryAppController<,,>))
+        .AddScoped(typeof(CrudAppController<,,,>))
         .AddMap()
         // .AddDynamicController()
         ;

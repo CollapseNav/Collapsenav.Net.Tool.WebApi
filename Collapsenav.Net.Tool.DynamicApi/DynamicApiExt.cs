@@ -1,4 +1,5 @@
 using Collapsenav.Net.Tool.WebApi;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,6 +39,9 @@ public static class DynamicApiExt
     public static IMvcBuilder AddDynamicWebApi(this IMvcBuilder builder, DynamicApiConfig? config = null)
     {
         DynamicApiConfig.GlobalConfig = config ?? new();
+        var dynamicApiTypes = AppDomain.CurrentDomain.GetTypes().Where(item => !item.IsInterface && !item.IsAbstract && (item.HasAttribute<DynamicApiAttribute>() || item.IsType<IDynamicApi>()));
+        if (dynamicApiTypes.NotEmpty())
+            dynamicApiTypes.ForEach(item => builder.Services.AddScoped(item));
         // 添加自定义的 DynamicApiProvider 用以识别标记的api
         builder.ConfigureApplicationPartManager(part =>
         {

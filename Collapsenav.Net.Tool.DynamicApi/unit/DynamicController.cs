@@ -32,6 +32,7 @@ public class DynamicController
     {
         Route = new RouteAttribute(route);
     }
+    public DynamicController() { }
 
     public Type? ControllerType { get; set; }
     public RouteAttribute? Route { get; set; }
