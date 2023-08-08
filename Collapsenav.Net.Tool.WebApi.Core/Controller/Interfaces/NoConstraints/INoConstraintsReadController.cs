@@ -1,10 +1,8 @@
-using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IReadController<T, GetT> : IController
-    where T : class, IEntity
-    where GetT : IBaseGet<T>
+
+public interface INoConstraintsReadController<T, GetT> : IController
 {
     /// <summary>
     /// 查找(单个 id)
@@ -12,9 +10,7 @@ public interface IReadController<T, GetT> : IController
     [HttpGet, Route("{id}")]
     Task<T?> QueryAsync(string? id);
 }
-public interface IReadController<TKey, T, GetT> : IReadController<T, GetT>
-    where T : class, IEntity<TKey>
-    where GetT : IBaseGet<T>
+public interface INoConstraintsReadController<TKey, T, GetT> : INoConstraintsReadController<T, GetT>
 {
     /// <summary>
     /// 查找(单个 id)
