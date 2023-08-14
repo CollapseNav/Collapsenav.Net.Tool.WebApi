@@ -1,10 +1,8 @@
-using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IWriteController<T, CreateT> : IController, IDisposable
-    where T : IEntity
-    where CreateT : IBaseCreate
+
+public interface INoConstraintsWriteController<T, CreateT> : INoConstraintsController, IDisposable
 {
     /// <summary>
     /// 删除(单个 id)
@@ -17,9 +15,7 @@ public interface IWriteController<T, CreateT> : IController, IDisposable
     [HttpPost]
     Task<T?> AddAsync([FromBody] CreateT? entity);
 }
-public interface IWriteController<TKey, T, CreateT> : IWriteController<T, CreateT>
-    where T : IEntity<TKey>
-    where CreateT : IBaseCreate
+public interface INoConstraintsWriteController<TKey, T, CreateT> : INoConstraintsWriteController<T, CreateT>
 {
     /// <summary>
     /// 删除(单个 id)

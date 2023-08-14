@@ -2,9 +2,8 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IQueryController<T, GetT> : IReadController<T, GetT>
-    where T : class, IEntity
-    where GetT : IBaseGet<T>
+
+public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadController<T, GetT>
 {
     /// <summary>
     /// 带条件分页
@@ -19,15 +18,13 @@ public interface IQueryController<T, GetT> : IReadController<T, GetT>
     /// <summary>
     /// 带条件分页
     /// </summary>
-    Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null) where NewGetT : IBaseGet<T, ReturnT>;
+    Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
-    Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input) where NewGetT : IBaseGet<T, ReturnT>;
+    Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input);
 }
-public interface IQueryController<TKey, T, GetT> : IReadController<TKey, T, GetT>, IQueryController<T, GetT>
-    where T : class, IEntity<TKey>
-    where GetT : IBaseGet<T>
+public interface INoConstraintsQueryController<TKey, T, GetT> : INoConstraintsReadController<TKey, T, GetT>, INoConstraintsQueryController<T, GetT>
 {
     /// <summary>
     /// 根据Id查询
@@ -40,4 +37,3 @@ public interface IQueryController<TKey, T, GetT> : IReadController<TKey, T, GetT
     [HttpPost, Route("ByIds")]
     Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey>? ids);
 }
-
