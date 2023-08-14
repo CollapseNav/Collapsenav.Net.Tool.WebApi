@@ -13,7 +13,7 @@ public class MapProfile : Profile
         CreateMap<TestModifyEntity, TestModifyEntityCreate>().ReverseMap();
     }
 }
-public class TestEntity : BaseEntity<int>
+public class TestEntity : AutoIncrementBaseEntity<int>
 {
     public TestEntity() { }
     public TestEntity(int id, string code, int? number, bool? isTest)
@@ -28,7 +28,7 @@ public class TestEntity : BaseEntity<int>
     public bool? IsTest { get; set; }
 }
 
-public class TestQueryEntity : BaseEntity<int>
+public class TestQueryEntity : AutoIncrementBaseEntity<int>
 {
     public TestQueryEntity() { }
     public TestQueryEntity(int id, string code, int? number, bool? isTest)
@@ -43,7 +43,7 @@ public class TestQueryEntity : BaseEntity<int>
     public bool? IsTest { get; set; }
 }
 
-public class TestModifyEntity : BaseEntity<int>
+public class TestModifyEntity : AutoIncrementBaseEntity<int>
 {
     public TestModifyEntity() { }
     public TestModifyEntity(int id, string code, int? number, bool? isTest)

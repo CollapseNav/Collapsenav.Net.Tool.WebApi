@@ -7,7 +7,7 @@ public class AutoTransactionErrorHandler
 {
     public static Task Run(HttpContext context)
     {
-        TransManager.HasError = true;
+        TransManager.HasException();
         return Task.CompletedTask;
     }
 }
