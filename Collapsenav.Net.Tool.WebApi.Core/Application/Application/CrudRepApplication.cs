@@ -37,6 +37,11 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     {
         return await Read.QueryPageAsync(input, page);
     }
+
+    public virtual async Task<int> UpdateAsync(IBaseUpdate<T> entity)
+    {
+        return await Write.UpdateAsync(entity);
+    }
 }
 public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, CreateT, GetT>, ICrudApplication<TKey, T, CreateT, GetT>
     where T : class, IEntity<TKey>

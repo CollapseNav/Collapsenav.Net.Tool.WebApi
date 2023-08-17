@@ -1,5 +1,4 @@
 using Collapsenav.Net.Tool.Data;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Collapsenav.Net.Tool.WebApi;
 public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyApplication<T, CreateT>
@@ -35,6 +34,13 @@ public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyA
             return 0;
         return await Repo.AddAsync(datas);
     }
+
+    public virtual async Task<int> UpdateAsync(IBaseUpdate<T> entity)
+    {
+        var where = entity.GetWhereExpression();
+        var update = entity.GetUpdateExpression();
+        return await Repo.UpdateAsync(where, update);
+    }
 }
 public class ModifyRepApplication<TKey, T, CreateT> : WriteRepApplication<TKey, T>, IModifyApplication<TKey, T, CreateT>
     where T : class, IEntity<TKey>
@@ -55,6 +61,12 @@ public class ModifyRepApplication<TKey, T, CreateT> : WriteRepApplication<TKey, 
 
     public override Task<bool> DeleteAsync(string? id, bool isTrue = false) => base.DeleteAsync(id, isTrue);
     public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey>? id, bool isTrue = false) => await Repo.DeleteAsync(id, isTrue);
+    public virtual async Task<int> UpdateAsync(IBaseUpdate<T> entity)
+    {
+        var where = entity.GetWhereExpression();
+        var update = entity.GetUpdateExpression();
+        return await Repo.UpdateAsync(where, update);
+    }
     public virtual async Task<int> UpdateAsync(TKey? id, CreateT? entity)
     {
         if (entity == null)
