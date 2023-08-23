@@ -29,7 +29,7 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T?> QueryAsync(string? id) => await App.QueryByStringIdAsync(id);
+    public virtual async Task<T?> QueryAsync(string? id) => await App.GetByIdAsync(id);
 
     public virtual async Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null) where NewGetT : IBaseGet<T, ReturnT>
     {
@@ -58,7 +58,7 @@ public class QueryAppController<TKey, T, GetT> : QueryAppController<T, GetT>, IQ
     [HttpGet, Route("{id}")]
     public virtual async Task<T?> QueryAsync(TKey? id) => await App.QueryAsync(id);
     [NonAction]
-    public override async Task<T?> QueryAsync(string? id) => await App.QueryByStringIdAsync(id);
+    public override async Task<T?> QueryAsync(string? id) => await App.GetByIdAsync(id);
     /// <summary>
     /// 根据Ids查询
     /// </summary>

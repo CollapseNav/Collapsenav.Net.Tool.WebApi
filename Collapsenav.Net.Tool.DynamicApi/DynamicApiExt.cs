@@ -1,5 +1,5 @@
+using Collapsenav.Net.Tool.Data;
 using Collapsenav.Net.Tool.WebApi;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -54,10 +54,38 @@ public static class DynamicApiExt
         return builder;
     }
 
-    public static DynamicController AddController<T>(this IServiceCollection services, string route)
+    internal static DynamicController AddController<T>(this IServiceCollection services, string route)
     {
-        var dc = new DynamicController(typeof(T), route);
-        ApplicationServiceConvention.DynamicControllers.Add(dc);
-        return dc;
+        var controller = new DynamicController(typeof(T), route);
+        ApplicationServiceConvention.DynamicControllers.Add(controller);
+        return controller;
+    }
+
+    public static DynamicController AddQueryController<Key, Entity, GetDto>(this IServiceCollection services, string route)
+        where Entity : class, IEntity<Key>
+        where GetDto : IBaseGet<Entity>
+    {
+        return services.AddController<QueryAppController<Key, Entity, GetDto>>(route);
+    }
+    public static DynamicController AddQueryController<Entity, GetDto>(this IServiceCollection services, string route)
+        where Entity : class, IEntity
+        where GetDto : IBaseGet<Entity>
+    {
+        return services.AddController<QueryAppController<Entity, GetDto>>(route);
+    }
+
+    public static DynamicController AddCrudController<Key, Entity, CreateDto, GetDto>(this IServiceCollection services, string route)
+        where Entity : class, IEntity<Key>
+        where GetDto : IBaseGet<Entity>
+        where CreateDto : IBaseCreate<Entity>
+    {
+        return services.AddController<CrudAppController<Key, Entity, CreateDto, GetDto>>(route);
+    }
+    public static DynamicController AddCrudController<Entity, CreateDto, GetDto>(this IServiceCollection services, string route)
+        where Entity : class, IEntity
+        where GetDto : IBaseGet<Entity>
+        where CreateDto : IBaseCreate<Entity>
+    {
+        return services.AddController<CrudAppController<Entity, CreateDto, GetDto>>(route);
     }
 }

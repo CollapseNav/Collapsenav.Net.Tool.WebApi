@@ -24,7 +24,7 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     public virtual async Task<IEnumerable<T>> QueryAsync(GetT? input) => await Read.QueryAsync(input);
     public virtual void Dispose() => Repo.Save();
     public virtual IQueryable<T> GetQuery(GetT? input) => Read.GetQuery(input);
-    public virtual async Task<T?> QueryByStringIdAsync(string? id) => await Read.QueryByStringIdAsync(id);
+    public virtual async Task<T?> GetByIdAsync(string? id) => await Read.GetByIdAsync(id);
     public virtual async Task<bool> DeleteAsync(string? id, bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT? input) where NewGetT : class, IBaseGet<T> => await Read.QueryAsync(input);
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT? input) => await Read.QueryAsync<ReturnT>(input);
@@ -62,6 +62,6 @@ public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, 
     public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey>? id, bool isTrue = false) => await Write.DeleteRangeAsync(id, isTrue);
     public virtual async Task<int> UpdateAsync(TKey? id, CreateT? entity) => await Write.UpdateAsync(id, entity);
     public virtual async Task<T?> QueryAsync(TKey? id) => await Read.QueryAsync(id);
-    public override Task<T?> QueryByStringIdAsync(string? id) => base.QueryByStringIdAsync(id);
+    public override Task<T?> GetByIdAsync(string? id) => base.GetByIdAsync(id);
     public virtual async Task<IEnumerable<T>> QueryByIdsAsync(IEnumerable<TKey>? ids) => await Read.QueryByIdsAsync(ids);
 }

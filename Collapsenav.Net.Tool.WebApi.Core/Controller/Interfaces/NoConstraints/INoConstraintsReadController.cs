@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
 
-public interface INoConstraintsReadController<T, GetT> : IController
+public interface INoConstraintsReadController<T> : IController
 {
     /// <summary>
     /// 查找(单个 id)
@@ -10,7 +10,7 @@ public interface INoConstraintsReadController<T, GetT> : IController
     [HttpGet, Route("{id}")]
     Task<T?> QueryAsync(string? id);
 }
-public interface INoConstraintsReadController<TKey, T, GetT> : INoConstraintsReadController<T, GetT>
+public interface INoConstraintsReadController<TKey, T> : INoConstraintsReadController<T>
 {
     /// <summary>
     /// 查找(单个 id)

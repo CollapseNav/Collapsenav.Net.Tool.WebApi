@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
 
-public interface INoConstraintsWriteController<T, CreateT> : INoConstraintsController, IDisposable
+public interface INoConstraintsWriteController<T, CreateT> : IController, IDisposable
 {
     /// <summary>
     /// 删除(单个 id)

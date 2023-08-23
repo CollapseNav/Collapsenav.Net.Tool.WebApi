@@ -10,7 +10,7 @@ public class ReadRepApplication<T> : Application<T>, IReadApplication<T>,ICountA
     {
         Repo = repository;
     }
-    public virtual async Task<T?> QueryByStringIdAsync(string? id) => await Repo.GetByIdAsync(id);
+    public virtual async Task<T?> GetByIdAsync(string? id) => await Repo.GetByIdAsync(id);
     public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>>? exp) => await Repo.IsExistAsync(exp);
     public virtual async Task<int> CountAsync(Expression<Func<T, bool>>? exp = null) => await Repo.CountAsync(exp);
 }

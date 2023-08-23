@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
 
-public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadController<T, GetT>
+public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadController<T>
 {
     /// <summary>
     /// 带条件分页
@@ -24,7 +24,7 @@ public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadCont
     /// </summary>
     Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input);
 }
-public interface INoConstraintsQueryController<TKey, T, GetT> : INoConstraintsReadController<TKey, T, GetT>, INoConstraintsQueryController<T, GetT>
+public interface INoConstraintsQueryController<TKey, T, GetT> : INoConstraintsReadController<TKey, T>, INoConstraintsQueryController<T, GetT>
 {
     /// <summary>
     /// 根据Id查询
