@@ -5,23 +5,22 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Collapsenav.Net.Tool.DynamicApi;
 
+/// <summary>
+/// 动态action
+/// </summary>
 public class DynamicAction
 {
     private readonly ActionModel? actionModel;
-
     public DynamicApiConfig? Config { get; set; } = DynamicApiConfig.GlobalConfig;
     public DynamicAction(ActionModel actionModel) : this(actionModel.ActionMethod)
     {
         this.actionModel = actionModel;
     }
-    public DynamicAction(MethodInfo methodInfo)
+    public DynamicAction(MethodInfo methodInfo, string? route = null)
     {
         MethodInfo = methodInfo;
-    }
-
-    public DynamicAction(MethodInfo methodInfo, string route) : this(methodInfo)
-    {
-        Route = new RouteAttribute(route);
+        if (route.NotEmpty())
+            Route = new RouteAttribute(route!);
     }
 
     public static DynamicAction? GetDynamicAction(MethodInfo info)

@@ -17,7 +17,7 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     /// <summary>
     /// 带条件分页
     /// </summary>
-    [HttpGet]
+    [HttpGet, Route("")]
     public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT? input, [FromQuery] PageRequest? page = null) => await App.QueryPageAsync(input, page);
     /// <summary>
     /// 带条件查询(不分页)

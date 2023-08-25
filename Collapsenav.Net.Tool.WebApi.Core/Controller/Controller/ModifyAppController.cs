@@ -18,7 +18,7 @@ public class ModifyAppController<T, CreateT> : ControllerBase, IModifyController
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    [HttpPost]
+    [HttpPost, Route("")]
     public virtual async Task<T?> AddAsync([FromBody] CreateT? entity) => await App.AddAsync(entity);
     /// <summary>
     /// 添加(多个)
@@ -54,7 +54,7 @@ public class ModifyAppController<TKey, T, CreateT> : ModifyAppController<T, Crea
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
-    [HttpDelete]
+    [HttpDelete, Route("")]
     public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey>? id, [FromQuery] bool isTrue = false) => await App.DeleteRangeAsync(id, isTrue);
     /// <summary>
     /// 更新

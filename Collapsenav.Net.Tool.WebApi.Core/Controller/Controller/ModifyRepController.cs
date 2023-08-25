@@ -18,7 +18,7 @@ public class ModifyRepController<T, CreateT> : ControllerBase, IModifyController
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    [HttpPost]
+    [HttpPost, Route("")]
     public virtual async Task<T?> AddAsync([FromBody] CreateT? entity)
     {
         if (entity == null)
@@ -75,7 +75,7 @@ public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, Crea
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
-    [HttpDelete]
+    [HttpDelete, Route("")]
     public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey>? id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
     /// <summary>
     /// 更新

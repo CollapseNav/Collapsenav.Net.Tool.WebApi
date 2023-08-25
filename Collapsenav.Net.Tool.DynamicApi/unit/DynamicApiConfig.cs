@@ -25,20 +25,20 @@ public class DynamicApiConfig
     /// <summary>
     /// 添加默认前后缀
     /// </summary>
-    public DynamicApiConfig AddDefault()
+    public DynamicApiConfig UseDefault()
     {
         // 配置可移除的前缀
         PrefixList.AddRange(DefaultPrefix);
         // 配置可移除的后缀
         SuffixList.AddRange(DefaultSuffix);
-        AddDefaultMethodPrefix();
+        UseDefaultMethodPrefix();
         return this;
     }
 
     /// <summary>
     /// 添加默认 method 识别前缀
     /// </summary>
-    public DynamicApiConfig AddDefaultMethodPrefix()
+    public DynamicApiConfig UseDefaultMethodPrefix()
     {
         GetPrefix.AddRange(DefaultGetPrefix);
         PostPrefix.AddRange(DefaultPostPrefix);
@@ -99,7 +99,7 @@ public class DynamicApiConfig
         return temp;
     }
     /// <summary>
-    /// 获取 http 类型
+    /// 获取 http 类型, 根据设置的前后缀进行匹配, 默认返回 POST
     /// </summary>
     public string GetHttpMethod(string actionName)
     {
@@ -156,7 +156,7 @@ public class DynamicApiConfig
         var actionName = action.ActionName;
 
         // 如果没有 自定义route 并且 actionname 不为空
-        if (!action.Selectors.HasRouteAttribute() && actionName.NotEmpty())
+        if (!action.Selectors.HasRouteAttribute() && actionName != null)
         {
             var selector = action.Selectors.IsEmpty() ? new SelectorModel() : action.Selectors.FirstOrDefault();
             if (selector == null)
@@ -175,7 +175,6 @@ public class DynamicApiConfig
                     selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { "PUT" }));
                 else if (action.Attributes.Any(i => i is HttpDeleteAttribute))
                     selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { "DELETE" }));
-
             }
             else if (!action.Selectors.HasActionAttribute())
                 selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { GetHttpMethod(actionName) }));

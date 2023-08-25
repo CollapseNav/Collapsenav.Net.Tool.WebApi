@@ -12,7 +12,7 @@ public interface INoConstraintsWriteController<T, CreateT> : IController, IDispo
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    [HttpPost]
+    [HttpPost, Route("")]
     Task<T?> AddAsync([FromBody] CreateT? entity);
 }
 public interface INoConstraintsWriteController<TKey, T, CreateT> : INoConstraintsWriteController<T, CreateT>

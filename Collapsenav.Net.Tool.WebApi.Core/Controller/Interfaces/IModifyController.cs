@@ -2,23 +2,13 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IModifyController<T, CreateT> : IWriteController<T, CreateT>, IDisposable
+public interface IModifyController<T, CreateT> : INoConstraintsModifyController<T, CreateT>, IWriteController<T, CreateT>, IDisposable
     where T : IEntity
     where CreateT : IBaseCreate
 {
-    /// <summary>
-    /// 添加(多个)
-    /// </summary>
-    [HttpPost, Route("AddRange")]
-    Task<int> AddRangeAsync(IEnumerable<CreateT>? entitys);
 }
-public interface IModifyController<TKey, T, CreateT> : IWriteController<TKey, T, CreateT>, IModifyController<T, CreateT>
+public interface IModifyController<TKey, T, CreateT> : INoConstraintsModifyController<TKey, T, CreateT>, IWriteController<TKey, T, CreateT>, IModifyController<T, CreateT>
     where T : IEntity<TKey>
     where CreateT : IBaseCreate
 {
-    /// <summary>
-    /// 删除(多个 id)
-    /// </summary>
-    [HttpDelete("ByIds")]
-    Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey>? id, [FromQuery] bool isTrue = false);
 }

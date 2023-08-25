@@ -37,59 +37,59 @@ public static class DynamicApiExt
 #endif
         return type;
     }
-    public static IServiceCollection AddQueryApi<T, GetT>(this IServiceCollection services, string route, string front = "") where T : class, IEntity where GetT : IBaseGet<T>
-    {
-        var typeName = $"{route}Controller";
-        var type = GenerateType(typeof(QueryRepController<T, GetT>), typeName, front);
-        services.AddScoped(typeof(IQueryRepository<T>), typeof(QueryRepository<T>));
-        services.AddScoped(typeof(IQueryController<T, GetT>), type);
-        services.AddDynamicController();
-        return services;
-    }
-    public static IServiceCollection AddQueryApi<TKey, T, GetT>(this IServiceCollection services, string route, string front = "") where T : class, IBaseEntity<TKey> where GetT : IBaseGet<T>
-    {
-        var typeName = $"{route}Controller";
-        var type = GenerateType(typeof(QueryRepController<TKey, T, GetT>), typeName, front);
-        services.AddScoped(typeof(IQueryRepository<TKey, T>), typeof(QueryRepository<TKey, T>));
-        services.AddScoped(typeof(IQueryController<TKey, T, GetT>), type);
-        services.AddDynamicController();
-        return services;
-    }
+    // public static IServiceCollection AddQueryApi<T, GetT>(this IServiceCollection services, string route, string front = "") where T : class, IEntity where GetT : IBaseGet<T>
+    // {
+    //     var typeName = $"{route}Controller";
+    //     var type = GenerateType(typeof(QueryRepController<T, GetT>), typeName, front);
+    //     services.AddScoped(typeof(IQueryRepository<T>), typeof(QueryRepository<T>));
+    //     services.AddScoped(typeof(IQueryController<T, GetT>), type);
+    //     services.AddDynamicController();
+    //     return services;
+    // }
+    // public static IServiceCollection AddQueryApi<TKey, T, GetT>(this IServiceCollection services, string route, string front = "") where T : class, IBaseEntity<TKey> where GetT : IBaseGet<T>
+    // {
+    //     var typeName = $"{route}Controller";
+    //     var type = GenerateType(typeof(QueryRepController<TKey, T, GetT>), typeName, front);
+    //     services.AddScoped(typeof(IQueryRepository<TKey, T>), typeof(QueryRepository<TKey, T>));
+    //     services.AddScoped(typeof(IQueryController<TKey, T, GetT>), type);
+    //     services.AddDynamicController();
+    //     return services;
+    // }
 
-    public static IServiceCollection AddModifyApi<T, CreateT>(this IServiceCollection services, string route, string front = "") where T : class, IEntity, new() where CreateT : IBaseCreate<T>
-    {
-        var typeName = $"{route}Controller";
-        var type = GenerateType(typeof(ModifyRepController<T, CreateT>), typeName, front);
-        services.AddScoped(typeof(IModifyRepository<T>), typeof(ModifyRepository<T>));
-        services.AddScoped(typeof(IModifyController<T, CreateT>), type);
-        services.AddDynamicController();
-        return services;
-    }
-    public static IServiceCollection AddModifyApi<TKey, T, CreateT>(this IServiceCollection services, string route, string front = "") where T : class, IBaseEntity<TKey>, new() where CreateT : IBaseCreate<T>
-    {
-        var typeName = $"{route}Controller";
-        var type = GenerateType(typeof(ModifyRepController<TKey, T, CreateT>), typeName, front);
-        services.AddScoped(typeof(IModifyRepository<TKey, T>), typeof(ModifyRepository<TKey, T>));
-        services.AddScoped(typeof(IModifyController<TKey, T, CreateT>), type);
-        services.AddDynamicController();
-        return services;
-    }
-    public static IServiceCollection AddCrudApi<T, CreateT, GetT>(this IServiceCollection services, string route, string front = "") where T : class, IEntity, new() where CreateT : IBaseCreate<T> where GetT : IBaseGet<T>
-    {
-        var typeName = $"{route}Controller";
-        var type = GenerateType(typeof(CrudRepController<T, CreateT, GetT>), typeName, front);
-        services.AddScoped(typeof(ICrudRepository<T>), typeof(CrudRepository<T>));
-        services.AddScoped(typeof(ICrudController<T, CreateT, GetT>), type);
-        services.AddDynamicController();
-        return services;
-    }
-    public static IServiceCollection AddCrudApi<TKey, T, CreateT, GetT>(this IServiceCollection services, string route, string front = "") where T : class, IBaseEntity<TKey>, new() where CreateT : IBaseCreate<T> where GetT : IBaseGet<T>
-    {
-        var typeName = $"{route}Controller";
-        var type = GenerateType(typeof(CrudRepController<TKey, T, CreateT, GetT>), typeName, front);
-        services.AddScoped(typeof(ICrudRepository<TKey, T>), typeof(CrudRepository<TKey, T>));
-        services.AddScoped(typeof(ICrudController<TKey, T, CreateT, GetT>), type);
-        services.AddDynamicController();
-        return services;
-    }
+    // public static IServiceCollection AddModifyApi<T, CreateT>(this IServiceCollection services, string route, string front = "") where T : class, IEntity, new() where CreateT : IBaseCreate<T>
+    // {
+    //     var typeName = $"{route}Controller";
+    //     var type = GenerateType(typeof(ModifyRepController<T, CreateT>), typeName, front);
+    //     services.AddScoped(typeof(IModifyRepository<T>), typeof(ModifyRepository<T>));
+    //     services.AddScoped(typeof(IModifyController<T, CreateT>), type);
+    //     services.AddDynamicController();
+    //     return services;
+    // }
+    // public static IServiceCollection AddModifyApi<TKey, T, CreateT>(this IServiceCollection services, string route, string front = "") where T : class, IBaseEntity<TKey>, new() where CreateT : IBaseCreate<T>
+    // {
+    //     var typeName = $"{route}Controller";
+    //     var type = GenerateType(typeof(ModifyRepController<TKey, T, CreateT>), typeName, front);
+    //     services.AddScoped(typeof(IModifyRepository<TKey, T>), typeof(ModifyRepository<TKey, T>));
+    //     services.AddScoped(typeof(IModifyController<TKey, T, CreateT>), type);
+    //     services.AddDynamicController();
+    //     return services;
+    // }
+    // public static IServiceCollection AddCrudApi<T, CreateT, GetT>(this IServiceCollection services, string route, string front = "") where T : class, IEntity, new() where CreateT : IBaseCreate<T> where GetT : IBaseGet<T>
+    // {
+    //     var typeName = $"{route}Controller";
+    //     var type = GenerateType(typeof(CrudRepController<T, CreateT, GetT>), typeName, front);
+    //     services.AddScoped(typeof(ICrudRepository<T>), typeof(CrudRepository<T>));
+    //     services.AddScoped(typeof(ICrudController<T, CreateT, GetT>), type);
+    //     services.AddDynamicController();
+    //     return services;
+    // }
+    // public static IServiceCollection AddCrudApi<TKey, T, CreateT, GetT>(this IServiceCollection services, string route, string front = "") where T : class, IBaseEntity<TKey>, new() where CreateT : IBaseCreate<T> where GetT : IBaseGet<T>
+    // {
+    //     var typeName = $"{route}Controller";
+    //     var type = GenerateType(typeof(CrudRepController<TKey, T, CreateT, GetT>), typeName, front);
+    //     services.AddScoped(typeof(ICrudRepository<TKey, T>), typeof(CrudRepository<TKey, T>));
+    //     services.AddScoped(typeof(ICrudController<TKey, T, CreateT, GetT>), type);
+    //     services.AddDynamicController();
+    //     return services;
+    // }
 }

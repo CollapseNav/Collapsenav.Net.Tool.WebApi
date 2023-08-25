@@ -15,6 +15,6 @@ public interface INoConstraintsModifyController<TKey, T, CreateT> : INoConstrain
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
-    [HttpDelete("ByIds")]
+    [HttpDelete, Route("ByIds")]
     Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey>? id, [FromQuery] bool isTrue = false);
 }

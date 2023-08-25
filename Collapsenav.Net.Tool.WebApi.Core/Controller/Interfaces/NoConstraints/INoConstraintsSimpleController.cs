@@ -12,11 +12,11 @@ public interface INoConstraintsSimpleController<T> : INoConstraintsReadControlle
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    [HttpPost]
+    [HttpPost, Route("")]
     Task<T?> AddAsync([FromBody] T? entity);
     /// <summary>
     /// 修改
     /// </summary>
-    [HttpPut("{id}")]
+    [HttpPut, Route("{id}")]
     Task UpdateAsync(string id, [FromBody] T? entity);
 }

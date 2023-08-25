@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Components;
-
 namespace Collapsenav.Net.Tool.DynamicApi;
 
 public class ApiJsonConfig
@@ -18,7 +16,7 @@ public class ApiJsonConfig
     public static DynamicApiConfig BuildDefaultApiConfig()
     {
         var config = new DynamicApiConfig();
-        return config.AddDefault();
+        return config.UseDefault();
     }
     /// <summary>
     /// 根据配置生成apiconfig

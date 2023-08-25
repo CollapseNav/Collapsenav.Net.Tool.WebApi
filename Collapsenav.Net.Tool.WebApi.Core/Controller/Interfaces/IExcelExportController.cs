@@ -1,7 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IExcelExportController<T, GetT> : IController
+public interface IExcelExportController<T, GetT> : INoConstraintsExcelExportController<T, GetT>, IController
 {
-    Task<FileStreamResult> ExportExcelAsync([FromQuery] GetT? input);
 }

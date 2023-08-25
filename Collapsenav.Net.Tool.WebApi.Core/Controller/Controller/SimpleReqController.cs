@@ -18,7 +18,7 @@ public class SimpleReqController<T> : ControllerBase, ISimpleController<T>
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    [HttpPost]
+    [HttpPost, Route("")]
     public virtual async Task<T?> AddAsync([FromBody] T? entity)
     {
         return await repository.AddAsync(entity);
@@ -47,7 +47,7 @@ public class SimpleReqController<T> : ControllerBase, ISimpleController<T>
     /// <summary>
     /// 修改
     /// </summary>
-    [HttpPut("{id}")]
+    [HttpPut, Route("{id}")]
     public virtual async Task UpdateAsync(string id, [FromBody] T? entity)
     {
         await repository.UpdateAsync(entity);

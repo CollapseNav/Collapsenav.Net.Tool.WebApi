@@ -73,6 +73,22 @@ public class DynamicController
         return cm;
     }
 
+    public DynamicController AddPageAction<T>(string route) where T : class, IBaseGet
+    {
+        var type = typeof(T);
+        var interfaces = type.GetInterfaces().Where(item => item.IsGenericType && item.GenericTypeArguments.Length == 2).ToArray();
+        if (interfaces.IsEmpty())
+            return this;
+        var inter = interfaces.FirstOrDefault()!;
+        var GenericTypeArguments = inter.GenericTypeArguments;
+        var genMethods = ControllerType?.GetMethods().Where(item => item.IsGenericMethod && item.DeclaringType!.IsType<IController>()).ToArray();
+        if (genMethods == null || genMethods.IsEmpty())
+            return this;
+        var t = genMethods.First(item => item.Name == "QueryPageAsync").MakeGenericMethod(type, GenericTypeArguments.Last());
+        var am = new DynamicAction(t, route);
+        Actions.Add(am);
+        return this;
+    }
     public DynamicController AddGetAction<T>(string route) where T : class, IBaseGet
     {
         var type = typeof(T);
@@ -84,9 +100,8 @@ public class DynamicController
         var genMethods = ControllerType?.GetMethods().Where(item => item.IsGenericMethod && item.DeclaringType!.IsType<IController>()).ToArray();
         if (genMethods == null || genMethods.IsEmpty())
             return this;
-        var t = genMethods.Last().MakeGenericMethod(type, GenericTypeArguments.Last());
+        var t = genMethods.First(item => item.Name == "QueryAsync").MakeGenericMethod(type, GenericTypeArguments.Last());
         var am = new DynamicAction(t, route);
-        am.ExtraAttributes.Add(new HttpPostAttribute());
         Actions.Add(am);
         return this;
     }

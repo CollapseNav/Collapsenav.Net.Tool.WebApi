@@ -30,7 +30,7 @@ public static class DynamicApiExt
     /// </summary>
     public static IServiceCollection AddDynamicWebApi(this IServiceCollection services, DynamicApiConfig? config = null)
     {
-        services.AddControllers().AddDynamicWebApi(config ?? new DynamicApiConfig().AddDefault());
+        services.AddControllers().AddDynamicWebApi(config ?? new DynamicApiConfig().UseDefault());
         return services;
     }
     /// <summary>

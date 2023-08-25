@@ -8,21 +8,21 @@ public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadCont
     /// <summary>
     /// 带条件分页
     /// </summary>
-    [HttpGet]
+    [HttpGet, Route("")]
     Task<PageData<T>> QueryPageAsync([FromQuery] GetT? input, [FromQuery] PageRequest? page = null);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
     [HttpGet, Route("Query")]
     Task<IEnumerable<T>> QueryAsync([FromQuery] GetT? input);
-    /// <summary>
-    /// 带条件分页
-    /// </summary>
-    Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null);
-    /// <summary>
-    /// 带条件查询(不分页)
-    /// </summary>
-    Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input);
+    // /// <summary>
+    // /// 带条件分页
+    // /// </summary>
+    // Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null);
+    // /// <summary>
+    // /// 带条件查询(不分页)
+    // /// </summary>
+    // Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input);
 }
 public interface INoConstraintsQueryController<TKey, T, GetT> : INoConstraintsReadController<TKey, T>, INoConstraintsQueryController<T, GetT>
 {

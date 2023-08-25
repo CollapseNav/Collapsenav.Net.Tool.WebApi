@@ -22,7 +22,7 @@ public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudControll
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    [HttpPost]
+    [HttpPost, Route("")]
     public virtual async Task<T?> AddAsync([FromBody] CreateT? entity) => await Write.AddAsync(entity);
 
     /// <summary>
@@ -33,7 +33,7 @@ public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudControll
     /// <summary>
     /// 带条件分页
     /// </summary>
-    [HttpGet]
+    [HttpGet, Route("")]
     public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT? input, [FromQuery] PageRequest? page = null) => await Read.QueryPageAsync(input, page);
     /// <summary>
     /// 带条件查询(不分页)
@@ -95,7 +95,7 @@ public class CrudRepController<TKey, T, CreateT, GetT> : CrudRepController<T, Cr
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
-    [HttpDelete]
+    [HttpDelete, Route("")]
     public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey>? id, [FromQuery] bool isTrue = false) => await Write.DeleteRangeAsync(id, isTrue);
     /// <summary>
     /// 更新
