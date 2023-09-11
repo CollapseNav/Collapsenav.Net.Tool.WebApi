@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Collapsenav.Net.Tool.WebApi;
 
 public interface INoConstraintsModifyController<T, CreateT> : INoConstraintsWriteController<T, CreateT>
-// , IDisposable
+, IDisposable
 {
     /// <summary>
     /// 添加(多个)

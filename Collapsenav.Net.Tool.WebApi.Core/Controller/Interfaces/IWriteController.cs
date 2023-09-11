@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
 public interface IWriteController<T, CreateT> : INoConstraintsWriteController<T, CreateT>, IController
-// , IDisposable
+, IDisposable
     where T : IEntity
     where CreateT : IBaseCreate
 {

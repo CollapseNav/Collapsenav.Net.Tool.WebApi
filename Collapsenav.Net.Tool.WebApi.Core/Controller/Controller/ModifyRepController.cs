@@ -56,7 +56,7 @@ public class ModifyRepController<T, CreateT> : ControllerBase, IModifyController
     /// 删除(多个 id)
     /// </summary>
     [HttpDelete, Route("")]
-    public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<string>? id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
+    public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<string>? id, [FromQuery] bool isTrue = false) => await Repository.DeleteByIdsAsync(id, isTrue);
     /// <summary>
     /// 更新
     /// </summary>
@@ -68,7 +68,7 @@ public class ModifyRepController<T, CreateT> : ControllerBase, IModifyController
         var data = Mapper.Map<T>(entity);
         if (data == null)
             return;
-        data.SetValue("Id", id);
+        data.SetKeyValue(id);
         await Repository.UpdateAsync(data);
     }
 }

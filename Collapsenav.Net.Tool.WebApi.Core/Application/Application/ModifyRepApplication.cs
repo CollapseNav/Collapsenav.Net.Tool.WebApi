@@ -42,7 +42,7 @@ public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyA
         return await Repo.UpdateAsync(where, update);
     }
 
-    public virtual async Task<int> DeleteRangeAsync<TKey>(IEnumerable<TKey>? id, bool isTrue = false) => await Repo.DeleteAsync(id, isTrue);
+    public virtual async Task<int> DeleteRangeAsync<TKey>(IEnumerable<TKey>? id, bool isTrue = false) => await Repo.DeleteByIdsAsync(id, isTrue);
     public virtual async Task<int> UpdateAsync<TKey>(TKey? id, CreateT? entity)
     {
         if (entity == null)
@@ -52,7 +52,7 @@ public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyA
         var data = Mapper.Map<T>(entity);
         if (data == null)
             return 0;
-        data.SetValue("Id", id);
+        data.SetKeyValue(id);
         return await Repo.UpdateAsync(data);
     }
 }
