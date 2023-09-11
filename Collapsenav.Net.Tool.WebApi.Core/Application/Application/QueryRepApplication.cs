@@ -41,18 +41,5 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplica
             return input?.GetQuery(Repo) ?? Enumerable.Empty<ReturnT>();
         });
     }
-
+    public virtual async Task<IEnumerable<T>> QueryByIdsAsync<TKey>(IEnumerable<TKey>? ids) => await Repo.QueryByIdsAsync(ids);
 }
-public class QueryRepApplication<TKey, T, GetT> : QueryRepApplication<T, GetT>, IQueryApplication<TKey, T, GetT>
-    where T : class, IEntity<TKey>
-    where GetT : IBaseGet<T>
-{
-    protected new IQueryRepository<TKey, T> Repo;
-    public QueryRepApplication(IQueryRepository<TKey, T> repository, IMap mapper) : base(repository, mapper)
-    {
-        Repo = repository;
-    }
-    public virtual async Task<T?> QueryAsync(TKey? id) => await Repo.GetByIdAsync(id);
-    public virtual async Task<IEnumerable<T>> QueryByIdsAsync(IEnumerable<TKey>? ids) => await Repo.QueryAsync(ids);
-}
-

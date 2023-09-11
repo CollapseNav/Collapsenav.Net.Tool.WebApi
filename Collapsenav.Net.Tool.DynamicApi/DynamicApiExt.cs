@@ -60,13 +60,6 @@ public static class DynamicApiExt
         ApplicationServiceConvention.DynamicControllers.Add(controller);
         return controller;
     }
-
-    public static DynamicController AddQueryController<Key, Entity, GetDto>(this IServiceCollection services, string route)
-        where Entity : class, IEntity<Key>
-        where GetDto : IBaseGet<Entity>
-    {
-        return services.AddController<QueryAppController<Key, Entity, GetDto>>(route);
-    }
     public static DynamicController AddQueryController<Entity, GetDto>(this IServiceCollection services, string route)
         where Entity : class, IEntity
         where GetDto : IBaseGet<Entity>
@@ -74,13 +67,6 @@ public static class DynamicApiExt
         return services.AddController<QueryAppController<Entity, GetDto>>(route);
     }
 
-    public static DynamicController AddCrudController<Key, Entity, CreateDto, GetDto>(this IServiceCollection services, string route)
-        where Entity : class, IEntity<Key>
-        where GetDto : IBaseGet<Entity>
-        where CreateDto : IBaseCreate<Entity>
-    {
-        return services.AddController<CrudAppController<Key, Entity, CreateDto, GetDto>>(route);
-    }
     public static DynamicController AddCrudController<Entity, CreateDto, GetDto>(this IServiceCollection services, string route)
         where Entity : class, IEntity
         where GetDto : IBaseGet<Entity>

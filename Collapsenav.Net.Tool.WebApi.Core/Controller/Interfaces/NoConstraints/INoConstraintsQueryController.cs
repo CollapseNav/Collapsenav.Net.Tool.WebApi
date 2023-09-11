@@ -23,17 +23,14 @@ public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadCont
     // /// 带条件查询(不分页)
     // /// </summary>
     // Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input);
-}
-public interface INoConstraintsQueryController<TKey, T, GetT> : INoConstraintsReadController<TKey, T>, INoConstraintsQueryController<T, GetT>
-{
     /// <summary>
     /// 根据Id查询
     /// </summary>
     [HttpGet, Route("ByIds")]
-    Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey>? ids);
+    Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<string>? ids);
     /// <summary>
     /// 根据Id查询
     /// </summary>
     [HttpPost, Route("ByIds")]
-    Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey>? ids);
+    Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<string>? ids);
 }

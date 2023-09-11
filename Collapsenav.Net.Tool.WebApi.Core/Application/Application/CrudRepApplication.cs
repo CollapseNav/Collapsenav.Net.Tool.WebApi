@@ -25,6 +25,7 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     public virtual void Dispose() => Repo.Save();
     public virtual IQueryable<T> GetQuery(GetT? input) => Read.GetQuery(input);
     public virtual async Task<T?> GetByIdAsync(string? id) => await Read.GetByIdAsync(id);
+    public virtual async Task<T?> GetByIdAsync<TKey>(TKey? id) => await Repo.GetByIdAsync(id);
     public virtual async Task<bool> DeleteAsync(string? id, bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT? input) where NewGetT : class, IBaseGet<T> => await Read.QueryAsync(input);
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT? input) => await Read.QueryAsync<ReturnT>(input);
@@ -32,36 +33,10 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     public virtual async Task<T?> AddAsync(T? entity) => await Write.AddAsync(entity);
     public virtual async Task<int> UpdateAsync(string? id, T? entity) => await Write.UpdateAsync(id, entity);
     public virtual IQueryable<T> GetQuery<NewGetT>(NewGetT? input) where NewGetT : IBaseGet<T> => Read.GetQuery(input);
-
-    public virtual async Task<PageData<ReturnT>> QueryPageAsync<ReturnT>(IBaseGet<T, ReturnT>? input, PageRequest? page = null)
-    {
-        return await Read.QueryPageAsync(input, page);
-    }
-
-    public virtual async Task<int> UpdateAsync(IBaseUpdate<T> entity)
-    {
-        return await Write.UpdateAsync(entity);
-    }
-}
-public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, CreateT, GetT>, ICrudApplication<TKey, T, CreateT, GetT>
-    where T : class, IEntity<TKey>
-    where CreateT : IBaseCreate<T>
-    where GetT : IBaseGet<T>
-{
-    protected new ICrudRepository<TKey, T> Repo;
-    protected new IModifyApplication<TKey, T, CreateT> Write;
-    protected new IQueryApplication<TKey, T, GetT> Read;
-    public CrudRepApplication(ICrudRepository<TKey, T> repo, IMap mapper) : base(repo, mapper)
-    {
-        Repo = repo;
-        Write = new ModifyRepApplication<TKey, T, CreateT>(Repo, mapper);
-        Read = new QueryRepApplication<TKey, T, GetT>(Repo, mapper);
-    }
-    public virtual async Task<bool> DeleteAsync(TKey? id, bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
-    public override Task<bool> DeleteAsync(string? id, bool isTrue = false) => base.DeleteAsync(id, isTrue);
-    public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey>? id, bool isTrue = false) => await Write.DeleteRangeAsync(id, isTrue);
-    public virtual async Task<int> UpdateAsync(TKey? id, CreateT? entity) => await Write.UpdateAsync(id, entity);
-    public virtual async Task<T?> QueryAsync(TKey? id) => await Read.QueryAsync(id);
-    public override Task<T?> GetByIdAsync(string? id) => base.GetByIdAsync(id);
-    public virtual async Task<IEnumerable<T>> QueryByIdsAsync(IEnumerable<TKey>? ids) => await Read.QueryByIdsAsync(ids);
+    public virtual async Task<PageData<ReturnT>> QueryPageAsync<ReturnT>(IBaseGet<T, ReturnT>? input, PageRequest? page = null) => await Read.QueryPageAsync(input, page);
+    public virtual async Task<int> UpdateAsync(IBaseUpdate<T> entity) => await Write.UpdateAsync(entity);
+    public virtual async Task<bool> DeleteAsync<TKey>(TKey? id, bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
+    public virtual async Task<int> DeleteRangeAsync<TKey>(IEnumerable<TKey>? id, bool isTrue = false) => await Write.DeleteRangeAsync(id, isTrue);
+    public virtual async Task<int> UpdateAsync<TKey>(TKey? id, CreateT? entity) => await Write.UpdateAsync(id, entity);
+    public virtual async Task<IEnumerable<T>> QueryByIdsAsync<TKey>(IEnumerable<TKey>? ids) => await Read.QueryByIdsAsync(ids);
 }

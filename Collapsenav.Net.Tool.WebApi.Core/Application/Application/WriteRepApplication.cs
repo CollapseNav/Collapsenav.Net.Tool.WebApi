@@ -10,8 +10,8 @@ public class WriteRepApplication<T> : Application<T>, IWriteApplication<T>
         Repo = repository;
     }
     public virtual async Task<T?> AddAsync(T? entity) => await Repo.AddAsync(entity);
-    public virtual async Task<bool> DeleteAsync(string? id, bool isTrue = false) => await Repo.DeleteAsync(id, isTrue);
 
+    public virtual async Task<bool> DeleteAsync<TKey>(TKey? id, bool isTrue = false) => await Repo.DeleteAsync(id, isTrue);
     public void Dispose() => Repo.Save();
 
     public virtual void Save() => Repo.Save();
@@ -25,15 +25,5 @@ public class WriteRepApplication<T> : Application<T>, IWriteApplication<T>
         entity.SetValue(prop.Name, tid);
         return await Repo.UpdateAsync(entity);
     }
-}
-public class WriteRepApplication<TKey, T> : WriteRepApplication<T>, IWriteApplication<TKey, T>
-    where T : class, IEntity<TKey>
-{
-    protected new readonly IModifyRepository<TKey, T> Repo;
-    public WriteRepApplication(IModifyRepository<TKey, T> repository) : base(repository)
-    {
-        Repo = repository;
-    }
-    public virtual async Task<bool> DeleteAsync(TKey? id, bool isTrue = false) => await Repo.DeleteAsync(id, isTrue);
 }
 

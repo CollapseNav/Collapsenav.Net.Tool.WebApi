@@ -14,19 +14,11 @@ public class SimpleAppController<T> : ControllerBase, ISimpleController<T>
     {
         App = app;
     }
-
-    /// <summary>
-    /// 添加(单个)
-    /// </summary>
     [HttpPost, Route("")]
     public virtual async Task<T?> AddAsync([FromBody] T? entity)
     {
         return await App.AddAsync(entity);
     }
-
-    /// <summary>
-    /// 删除(单个 id)
-    /// </summary>
     [HttpDelete, Route("{id}")]
     public virtual async Task DeleteAsync(string? id, [FromQuery] bool isTrue = false)
     {
@@ -34,19 +26,16 @@ public class SimpleAppController<T> : ControllerBase, ISimpleController<T>
             return;
         await App.DeleteAsync(id, isTrue);
     }
-
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
     [HttpGet, Route("{id}")]
     public virtual async Task<T?> QueryAsync(string? id)
     {
         return await App.GetByIdAsync(id);
     }
-
-    /// <summary>
-    /// 修改
-    /// </summary>
+    [HttpGet, Route("{id}")]
+    public virtual async Task<T?> QueryAsync(object? id)
+    {
+        return await App.GetByIdAsync(id);
+    }
     [HttpPut, Route("{id}")]
     public virtual async Task UpdateAsync(string id, [FromBody] T? entity)
     {

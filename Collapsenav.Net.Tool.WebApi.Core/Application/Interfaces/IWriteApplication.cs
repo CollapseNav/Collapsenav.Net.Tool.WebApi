@@ -5,7 +5,3 @@ public interface IWriteApplication<T> : INoConstraintsWriteApplication<T>, IAppl
     where T : IEntity
 {
 }
-public interface IWriteApplication<TKey, T> : INoConstraintsWriteApplication<TKey, T>, IWriteApplication<T>
-    where T : IEntity<TKey>
-{
-}

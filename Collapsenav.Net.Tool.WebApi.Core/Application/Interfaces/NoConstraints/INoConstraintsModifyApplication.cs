@@ -11,15 +11,12 @@ public interface INoConstraintsModifyApplication<T, CreateT> : INoConstraintsWri
     /// </summary>
     Task<int> AddRangeAsync(IEnumerable<CreateT>? entitys);
     Task<int> UpdateAsync(IBaseUpdate<T> entity);
-}
-public interface INoConstraintsModifyApplication<TKey, T, CreateT> : INoConstraintsModifyApplication<T, CreateT>, INoConstraintsWriteApplication<TKey, T>
-{
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
-    Task<int> DeleteRangeAsync(IEnumerable<TKey>? id, bool isTrue = false);
+    Task<int> DeleteRangeAsync<TKey>(IEnumerable<TKey>? id, bool isTrue = false);
     /// <summary>
     /// 更新
     /// </summary>
-    Task<int> UpdateAsync(TKey? id, CreateT? entity);
+    Task<int> UpdateAsync<TKey>(TKey? id, CreateT? entity);
 }

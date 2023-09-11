@@ -23,7 +23,7 @@ public class CrudRepControllerTest
     [Fact, Order(1)]
     public async Task QueryTest()
     {
-        using var RepController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        using var RepController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
         var data = await RepController.QueryAsync(new TestEntityGet { });
         Assert.True(data.Count() == 10);
         data = await RepController.QueryAsync(new TestEntityGet { Id = 2 });
@@ -37,7 +37,7 @@ public class CrudRepControllerTest
     [Fact, Order(2)]
     public async Task PageTest()
     {
-        using var RepController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        using var RepController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
         var data = await RepController.QueryPageAsync(new TestEntityGet { });
         Assert.True(data.Length == 10);
         data = await RepController.QueryPageAsync(new TestEntityGet { Id = 2 });
@@ -66,18 +66,18 @@ public class CrudRepControllerTest
     [Fact, Order(3)]
     public async Task FindByIdTest()
     {
-        using var RepController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
-        var data = await RepController.QueryAsync(7);
+        using var RepController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
+        var data = await RepController.QueryAsync("7");
         Assert.True(data.Number == 850);
-        var datas = await RepController.QueryByIdsAsync(new[] { 7, 8, 9, 10 });
+        var datas = await RepController.QueryByIdsAsync(new string[] { "7", "8", "9", "10" });
         Assert.True(datas.Count() == 4);
-        datas = await RepController.QueryByIdsPostAsync(new[] { 3, 6, 7, 11 });
+        datas = await RepController.QueryByIdsPostAsync(new string[] { "3", "6", "7", "11" });
         Assert.True(datas.Count() == 3);
     }
     [Fact, Order(5)]
     public async Task AddTest()
     {
-        using var RepController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        using var RepController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
         var entitys = new List<TestEntityCreate>{
                 new ("wait-to-delete",23334,true),
                 new ("wait-to-delete",23333,true),
@@ -93,7 +93,7 @@ public class CrudRepControllerTest
         await RepController.AddAsync(entitys.First());
         await RepController.AddRangeAsync(entitys.Skip(1));
         RepController.Dispose();
-        using var queryController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        using var queryController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
         var data = await queryController.QueryAsync(new TestEntityGet { Code = "wait-to-delete" });
         Assert.True(data.Count() == 10);
     }
@@ -101,13 +101,13 @@ public class CrudRepControllerTest
     [Fact, Order(6)]
     public async Task UpdateTest()
     {
-        var queryController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
-        using var RepController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        var queryController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
+        using var RepController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
         var data = await queryController.QueryAsync(new TestEntityGet { Code = "wait-to-delete", Number = 23333 });
         foreach (var item in data)
-            await RepController.UpdateAsync(item.Id, new(item.Code, item.Number + 1, !item.IsTest));
+            await RepController.UpdateAsync(item.Id.ToString(), new(item.Code, item.Number + 1, !item.IsTest));
         RepController.Dispose();
-        queryController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        queryController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
         var pageData = await queryController.QueryPageAsync(new TestEntityGet { Code = "wait-to-delete", Number = 23333 });
         Assert.True(pageData.Length == 1);
         Assert.True(pageData.Data.All(item => item.Number == 23335));
@@ -115,13 +115,13 @@ public class CrudRepControllerTest
     [Fact, Order(7)]
     public async Task DeleteTest()
     {
-        var queryController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
-        using var RepController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        var queryController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
+        using var RepController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
         var data = await queryController.QueryAsync(new TestEntityGet { Code = "wait-to-delete" });
-        await RepController.DeleteAsync(data.First().Id, true);
-        await RepController.DeleteRangeAsync(data.Skip(1).Select(item => item.Id), true);
+        await RepController.DeleteAsync(data.First().Id.ToString(), true);
+        await RepController.DeleteRangeAsync(data.Skip(1).Select(item => item.Id.ToString()), true);
         RepController.Dispose();
-        queryController = GetService<ICrudController<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        queryController = GetService<ICrudController<TestEntity, TestEntityCreate, TestEntityGet>>();
         data = await queryController.QueryAsync(new TestEntityGet { Code = "wait-to-delete" });
         Assert.True(data.IsEmpty());
     }

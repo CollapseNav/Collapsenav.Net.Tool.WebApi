@@ -10,11 +10,3 @@ public interface INoConstraintsReadController<T> : IController
     [HttpGet, Route("{id}")]
     Task<T?> QueryAsync(string? id);
 }
-public interface INoConstraintsReadController<TKey, T> : INoConstraintsReadController<T>
-{
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    [HttpGet, Route("{id}")]
-    Task<T?> QueryAsync(TKey? id);
-}

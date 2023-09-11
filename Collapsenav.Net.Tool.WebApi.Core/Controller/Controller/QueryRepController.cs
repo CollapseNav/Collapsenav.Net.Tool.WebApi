@@ -13,6 +13,11 @@ public class QueryRepController<T, GetT> : ControllerBase, IQueryController<T, G
     {
         Repository = repository;
     }
+    [HttpGet, Route("{id}")]
+    public virtual async Task<T?> QueryAsync(string? id)
+    {
+        return await Repository.GetByIdAsync(id);
+    }
     /// <summary>
     /// 带条件分页
     /// </summary>
@@ -24,10 +29,15 @@ public class QueryRepController<T, GetT> : ControllerBase, IQueryController<T, G
     [HttpGet, Route("Query")]
     public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT? input) => await Repository.QueryAsync(input?.GetQuery(Repository));
     /// <summary>
-    /// 查找(单个 id)
+    /// 根据Ids查询
     /// </summary>
-    [HttpGet, Route("{id}")]
-    public virtual async Task<T?> QueryAsync(string? id) => await Repository.GetByIdAsync(id);
+    [HttpGet, Route("ByIds")]
+    public virtual async Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<string>? ids) => await Repository.QueryByIdsAsync(ids);
+    /// <summary>
+    /// 根据Ids查询
+    /// </summary>
+    [HttpPost, Route("ByIds")]
+    public virtual async Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<string>? ids) => await Repository.QueryByIdsAsync(ids);
 
     public virtual async Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null) where NewGetT : IBaseGet<T, ReturnT>
     {
@@ -39,33 +49,3 @@ public class QueryRepController<T, GetT> : ControllerBase, IQueryController<T, G
         throw new NotImplementedException();
     }
 }
-[ApiController]
-[Route("[controller]")]
-public class QueryRepController<TKey, T, GetT> : QueryRepController<T, GetT>, IQueryController<TKey, T, GetT>
-    where T : class, IEntity<TKey>
-    where GetT : IBaseGet<T>
-{
-    protected new IQueryRepository<TKey, T> Repository;
-    public QueryRepController(IQueryRepository<TKey, T> repository) : base(repository)
-    {
-        Repository = repository;
-    }
-    [NonAction]
-    public new Task<T?> QueryAsync(string? id) => base.QueryAsync(id);
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    [HttpGet, Route("{id}")]
-    public virtual async Task<T?> QueryAsync(TKey? id) => await Repository.GetByIdAsync(id);
-    /// <summary>
-    /// 根据Ids查询
-    /// </summary>
-    [HttpGet, Route("ByIds")]
-    public virtual async Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey>? ids) => await Repository.QueryAsync(ids);
-    /// <summary>
-    /// 根据Ids查询
-    /// </summary>
-    [HttpPost, Route("ByIds")]
-    public virtual async Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey>? ids) => await Repository.QueryAsync(ids);
-}
-

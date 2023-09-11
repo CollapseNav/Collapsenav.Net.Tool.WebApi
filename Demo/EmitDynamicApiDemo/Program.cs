@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseAutoInjectProviderFactory();
 builder.Services.AddControllers().AddControllersAsServices();
 builder.Services.AddDynamicWebApi().AddRepController().AddAppController();
-builder.Services.AddController<CrudAppController<long, FirstEntity, FirstCreateDto, FirstGetDto>>("testdy")
+builder.Services.AddCrudController<FirstEntity, FirstCreateDto, FirstGetDto>("testdy")
 .AddGetAction<FirstJoinGetDto>("QueryNew")
 .AddGetAction<FirstJoinGetDto2>("QueryTTTT")
 ;
@@ -101,6 +101,7 @@ public class FirstJoinGetDto : BaseJoinGet<FirstEntity, ReturnModel>
         .LeftJoin<SecondEntity>(i => i.Name, i => i.Description)
         .Query
         .WhereIf(Id.HasValue, item => item.Data1.Id == Id)
+        .WhereIf(Name, item => item.Data1.Name == Name)
         .Select(item => new ReturnModel
         {
             Id = item.Data1.Id,

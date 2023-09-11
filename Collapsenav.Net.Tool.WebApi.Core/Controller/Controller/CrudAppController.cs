@@ -41,17 +41,6 @@ public class CrudAppController<T, CreateT, GetT> : ControllerBase, ICrudControll
     public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT? input) => await Read.QueryAsync(input);
     [NonAction]
     public virtual void Dispose() => Write.Dispose();
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    [HttpGet, Route("{id}")]
-    public virtual async Task<T?> QueryAsync(string? id) => await Read.QueryAsync(id);
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    [HttpDelete, Route("{id}")]
-    public virtual async Task DeleteAsync(string? id, [FromQuery] bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
-
     public virtual async Task<PageData<ReturnT>> QueryPageAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input, [FromQuery] PageRequest? page = null) where NewGetT : IBaseGet<T, ReturnT>
     {
         return await Read.QueryPageAsync<NewGetT, ReturnT>(input, page);
@@ -61,56 +50,34 @@ public class CrudAppController<T, CreateT, GetT> : ControllerBase, ICrudControll
     {
         return await Read.QueryAsync<NewGetT, ReturnT>(input);
     }
-}
-[ApiController]
-[Route("[controller]")]
-public class CrudAppController<TKey, T, CreateT, GetT> : CrudAppController<T, CreateT, GetT>, ICrudController<TKey, T, CreateT, GetT>
-    where T : class, IEntity<TKey>
-    where CreateT : IBaseCreate<T>
-    where GetT : IBaseGet<T>
-{
-    protected new ICrudApplication<TKey, T, CreateT, GetT> App;
-    protected new IModifyController<TKey, T, CreateT> Write;
-    protected new IQueryController<TKey, T, GetT> Read;
-    public CrudAppController(ICrudApplication<TKey, T, CreateT, GetT> app, IMap mapper) : base(app, mapper)
-    {
-        App = app;
-        Write = new ModifyAppController<TKey, T, CreateT>(App, mapper);
-        Read = new QueryAppController<TKey, T, GetT>(App);
-    }
-
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
     [HttpDelete, Route("{id}")]
-    public virtual async Task DeleteAsync(TKey? id, [FromQuery] bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
-    [NonAction]
-    public override Task DeleteAsync(string? id, [FromQuery] bool isTrue = false) => base.DeleteAsync(id, isTrue);
+    public virtual async Task DeleteAsync(string? id, [FromQuery] bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
     [HttpDelete, Route("")]
-    public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey>? id, [FromQuery] bool isTrue = false) => await Write.DeleteRangeAsync(id, isTrue);
+    public virtual async Task<int> DeleteRangeAsync(IEnumerable<string>? id, [FromQuery] bool isTrue = false) => await Write.DeleteRangeAsync(id, isTrue);
     /// <summary>
     /// 更新
     /// </summary>
     [HttpPut, Route("{id}")]
-    public virtual async Task UpdateAsync(TKey? id, CreateT? entity) => await Write.UpdateAsync(id, entity);
+    public virtual async Task UpdateAsync(string? id, CreateT? entity) => await Write.UpdateAsync(id, entity);
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T?> QueryAsync(TKey? id) => await Read.QueryAsync(id);
-    [NonAction]
-    public override Task<T?> QueryAsync(string? id) => base.QueryAsync(id);
+    public virtual async Task<T?> QueryAsync(string? id) => await Read.QueryAsync(id);
     /// <summary>
     /// 根据Ids查询
     /// </summary>
     [HttpGet, Route("ByIds")]
-    public virtual async Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey>? ids) => await Read.QueryByIdsAsync(ids);
+    public virtual async Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<string>? ids) => await Read.QueryByIdsAsync(ids);
     /// <summary>
     /// 根据Ids查询
     /// </summary>
     [HttpPost, Route("ByIds")]
-    public virtual async Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey>? ids) => await Read.QueryByIdsPostAsync(ids);
+    public virtual async Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<string>? ids) => await Read.QueryByIdsPostAsync(ids);
 }

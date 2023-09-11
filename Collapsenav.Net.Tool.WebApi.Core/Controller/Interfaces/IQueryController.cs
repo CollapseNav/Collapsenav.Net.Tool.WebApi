@@ -15,9 +15,4 @@ public interface IQueryController<T, GetT> : INoConstraintsQueryController<T, Ge
     /// </summary>
     Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>([FromQuery] NewGetT? input) where NewGetT : IBaseGet<T, ReturnT>;
 }
-public interface IQueryController<TKey, T, GetT> : INoConstraintsQueryController<TKey, T, GetT>, IReadController<TKey, T>, IQueryController<T, GetT>
-    where T : class, IEntity<TKey>
-    where GetT : IBaseGet<T>
-{
-}
 

@@ -45,43 +45,23 @@ public class ModifyRepController<T, CreateT> : ControllerBase, IModifyController
             return 0;
         return await Repository.AddAsync(datas);
     }
+    [NonAction]
+    public void Dispose() => Repository.Save();
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
     [HttpDelete, Route("{id}")]
     public virtual async Task DeleteAsync(string? id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
-    [NonAction]
-    public void Dispose() => Repository.Save();
-
-}
-public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, CreateT>, IModifyController<TKey, T, CreateT>
-    where T : class, IEntity<TKey>
-    where CreateT : IBaseCreate<T>
-{
-    protected new readonly IModifyRepository<TKey, T> Repository;
-    protected new readonly IMap Mapper;
-    public ModifyRepController(IModifyRepository<TKey, T> repository, IMap mapper) : base(repository, mapper)
-    {
-        Repository = repository;
-        Mapper = mapper;
-    }
-    [NonAction]
-    public override Task DeleteAsync(string? id, [FromQuery] bool isTrue = false) => base.DeleteAsync(id, isTrue);
-    /// <summary>
-    /// 删除(单个 id)
-    /// </summary>
-    [HttpDelete, Route("{id}")]
-    public virtual async Task DeleteAsync(TKey? id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
     [HttpDelete, Route("")]
-    public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey>? id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
+    public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<string>? id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
     /// <summary>
     /// 更新
     /// </summary>
     [HttpPut, Route("{id}")]
-    public virtual async Task UpdateAsync(TKey? id, CreateT? entity)
+    public virtual async Task UpdateAsync(string? id, CreateT? entity)
     {
         if (entity.IsExist(Repository.Query()))
             throw new Exception("Data Exist");
@@ -92,4 +72,3 @@ public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, Crea
         await Repository.UpdateAsync(data);
     }
 }
-

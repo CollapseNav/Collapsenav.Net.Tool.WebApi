@@ -6,9 +6,3 @@ public interface IModifyApplication<T, CreateT> : INoConstraintsModifyApplicatio
     where CreateT : IBaseCreate
 {
 }
-public interface IModifyApplication<TKey, T, CreateT> : INoConstraintsModifyApplication<TKey, T, CreateT>, IModifyApplication<T, CreateT>, IWriteApplication<TKey, T>
-    where T : IEntity<TKey>
-    where CreateT : IBaseCreate
-{
-}
-

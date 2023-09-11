@@ -5,12 +5,5 @@ public interface INoConstraintsReadApplication<T> : IApplication<T>
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
-    Task<T?> GetByIdAsync(string? id);
-}
-public interface INoConstraintsReadApplication<TKey, T> : INoConstraintsReadApplication<T>
-{
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    Task<T?> QueryAsync(TKey? id);
+    Task<T?> GetByIdAsync<TKey>(TKey? id);
 }

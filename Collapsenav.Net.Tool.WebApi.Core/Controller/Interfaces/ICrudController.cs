@@ -8,9 +8,3 @@ public interface ICrudController<T, CreateT, GetT> : INoConstraintsCrudControlle
     where GetT : IBaseGet<T>
 {
 }
-public interface ICrudController<TKey, T, CreateT, GetT> : INoConstraintsCrudController<TKey, T, CreateT, GetT>, IQueryController<TKey, T, GetT>, IModifyController<TKey, T, CreateT>
-    where T : class, IEntity<TKey>
-    where CreateT : IBaseCreate<T>
-    where GetT : IBaseGet<T>
-{
-}

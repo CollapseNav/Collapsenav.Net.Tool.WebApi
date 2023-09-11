@@ -27,6 +27,7 @@ public class SimpleApplication<T> : Application<T>, ISimpleApplication<T>
         await Repo.UpdateAsync(entity);
     }
 
+    public virtual async Task<T?> GetByIdAsync<TKey>(TKey? id) => await Repo.GetByIdAsync(id);
     public virtual async Task<T?> GetByIdAsync(string? id)
     {
         return await Repo.GetByIdAsync(id);

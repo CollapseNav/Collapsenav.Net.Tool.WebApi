@@ -11,9 +11,3 @@ public interface IQueryApplication<T, GetT> : INoConstraintsQueryApplication<T, 
     Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(IBaseGet<T, ReturnT>? input);
     Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT? input) where NewGetT : class, IBaseGet<T>;
 }
-public interface IQueryApplication<TKey, T, GetT> : INoConstraintsQueryApplication<TKey, T, GetT>, IQueryApplication<T, GetT>,
-IReadApplication<TKey, T>
-    where T : class, IEntity<TKey>
-    where GetT : IBaseGet<T>
-{
-}

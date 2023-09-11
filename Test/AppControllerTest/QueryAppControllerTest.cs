@@ -9,11 +9,11 @@ namespace Collapsenav.Net.Tool.WebApi.Test;
 public class QueryAppControllerTest
 {
     protected readonly IServiceProvider Provider;
-    protected readonly IQueryController<int, TestQueryEntity, TestQueryEntityGet> RepController;
+    protected readonly IQueryController<TestQueryEntity, TestQueryEntityGet> RepController;
     public QueryAppControllerTest()
     {
         Provider = DIConfig.GetAppProvider();
-        RepController = GetService<IQueryController<int, TestQueryEntity, TestQueryEntityGet>>();
+        RepController = GetService<IQueryController<TestQueryEntity, TestQueryEntityGet>>();
     }
     protected T GetService<T>()
     {
@@ -64,11 +64,11 @@ public class QueryAppControllerTest
     [Fact]
     public async Task FindByIdTest()
     {
-        var data = await RepController.QueryAsync(5);
+        var data = await RepController.QueryAsync("5");
         Assert.True(data.Number == 520);
-        var datas = await RepController.QueryByIdsAsync(new[] { 7, 8, 9, 10 });
+        var datas = await RepController.QueryByIdsAsync(new [] { "7", "8", "9", "10" });
         Assert.True(datas.Count() == 4);
-        datas = await RepController.QueryByIdsPostAsync(new[] { 3, 6, 7, 11 });
+        datas = await RepController.QueryByIdsPostAsync(new [] { "3", "6", "7", "11" });
         Assert.True(datas.Count() == 3);
     }
 }

@@ -41,16 +41,16 @@ public class DIConfig
         .BuildServiceProvider();
     }
 
-    public static (IServiceCollection collection, ServiceProvider provider) GetDynamicApiProvider()
-    {
-        var coll = new ServiceCollection()
-        .AddQueryApi<TestEntity, TestEntityGet>("DTestQuery")
-        .AddQueryApi<int, TestEntity, TestEntityGet>("DTestIntQuery")
-        .AddModifyApi<TestEntity, TestEntityCreate>("DTestModify")
-        .AddModifyApi<int, TestEntity, TestEntityCreate>("DTestIntModify")
-        .AddCrudApi<TestEntity, TestEntityCreate, TestEntityGet>("DTestCrud")
-        .AddCrudApi<int, TestEntity, TestEntityCreate, TestEntityGet>("DTestIntCrud")
-        ;
-        return (coll, coll.BuildServiceProvider());
-    }
+    // public static (IServiceCollection collection, ServiceProvider provider) GetDynamicApiProvider()
+    // {
+    //     var coll = new ServiceCollection()
+    //     // .AddQueryApi<TestEntity, TestEntityGet>("DTestQuery")
+    //     // .AddQueryApi<int, TestEntity, TestEntityGet>("DTestIntQuery")
+    //     .AddModifyApi<TestEntity, TestEntityCreate>("DTestModify")
+    //     .AddModifyApi<int, TestEntity, TestEntityCreate>("DTestIntModify")
+    //     .AddCrudApi<TestEntity, TestEntityCreate, TestEntityGet>("DTestCrud")
+    //     .AddCrudApi<int, TestEntity, TestEntityCreate, TestEntityGet>("DTestIntCrud")
+    //     ;
+    //     return (coll, coll.BuildServiceProvider());
+    // }
 }

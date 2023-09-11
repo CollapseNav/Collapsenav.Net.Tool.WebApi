@@ -9,11 +9,11 @@ namespace Collapsenav.Net.Tool.WebApi.Test;
 public class QueryControllerTest
 {
     protected readonly IServiceProvider Provider;
-    protected readonly IQueryController<int, TestQueryEntity, TestQueryEntityGet> RepController;
+    protected readonly IQueryController<TestQueryEntity, TestQueryEntityGet> RepController;
     public QueryControllerTest()
     {
         Provider = DIConfig.GetProvider();
-        RepController = GetService<IQueryController<int, TestQueryEntity, TestQueryEntityGet>>();
+        RepController = GetService<IQueryController<TestQueryEntity, TestQueryEntityGet>>();
     }
     protected T GetService<T>()
     {
@@ -56,7 +56,7 @@ public class QueryControllerTest
         data = await RepController.QueryPageAsync(new TestQueryEntityGet { Number = 233 }, new PageRequest { Index = 2, Max = 3 });
         Assert.True(data.Length == 3);
         Assert.True(data.Total == 8);
-        data = await RepController.QueryPageAsync(new TestQueryEntityGet { Number = 233  }, new PageRequest { Index = 3, Max = 3 });
+        data = await RepController.QueryPageAsync(new TestQueryEntityGet { Number = 233 }, new PageRequest { Index = 3, Max = 3 });
         Assert.True(data.Length == 2);
         Assert.True(data.Total == 8);
     }
@@ -64,11 +64,11 @@ public class QueryControllerTest
     [Fact]
     public async Task FindByIdTest()
     {
-        var data = await RepController.QueryAsync(5);
+        var data = await RepController.QueryAsync("5");
         Assert.True(data.Number == 520);
-        var datas = await RepController.QueryByIdsAsync(new[] { 7, 8, 9, 10 });
+        var datas = await RepController.QueryByIdsAsync(new[] { "7", "8", "9", "10" });
         Assert.True(datas.Count() == 4);
-        datas = await RepController.QueryByIdsPostAsync(new[] { 3, 6, 7, 11 });
+        datas = await RepController.QueryByIdsPostAsync(new[] { "3", "6", "7", "11" });
         Assert.True(datas.Count() == 3);
     }
 }

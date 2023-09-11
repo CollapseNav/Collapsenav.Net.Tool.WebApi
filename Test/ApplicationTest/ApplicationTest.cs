@@ -29,10 +29,10 @@ public class ApplicationTest
     [Fact]
     public async Task MapQueryTest()
     {
-        var app = GetService<ICrudApplication<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        var app = GetService<ICrudApplication<TestEntity, TestEntityCreate, TestEntityGet>>();
         var data = await app.QueryAsync<TestEntityReturnDto>(new TestEntityGet());
         Assert.True(data.Count() == 10);
-        var item = await app.QueryByStringIdAsync("1");
+        var item = await app.GetByIdAsync(1);
         Assert.True(item.Id == 1);
     }
 
@@ -47,7 +47,7 @@ public class ApplicationTest
     [Fact, Order(333)]
     public async Task NewGetInputTest()
     {
-        var app = GetService<ICrudApplication<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        var app = GetService<ICrudApplication<TestEntity, TestEntityCreate, TestEntityGet>>();
         var data = await app.QueryAsync(new NewGetInput());
         Assert.True(data.Count() == 10);
 
@@ -58,7 +58,7 @@ public class ApplicationTest
     [Fact]
     public async Task CrudApplicationUpdateTest()
     {
-        var app = GetService<ICrudApplication<int, TestEntity, TestEntityCreate, TestEntityGet>>();
+        var app = GetService<ICrudApplication<TestEntity, TestEntityCreate, TestEntityGet>>();
         await app.UpdateAsync("1", new TestEntity { Code = "32" });
         await app.SaveAsync();
         var datas = await app.GetQuery(new TestEntityGet { Code = "32" }).ToListAsync();
