@@ -91,22 +91,18 @@ public class FirstGetDto : BaseGet<FirstEntity>
 public class FirstJoinGetDto : BaseJoinGet<FirstEntity, ReturnModel>
 {
     public long? Id { get; set; }
-    /// <summary>
-    /// mdfasfjoasjdfclsalk
-    /// </summary>
     public string Name { get; set; }
     public override IQueryable<ReturnModel> GetQuery(IRepository<FirstEntity> repo)
     {
-        return repo.CreateJoin()
+        return repo
         .LeftJoin<SecondEntity>(i => i.Name, i => i.Description)
-        .Query
         .WhereIf(Id.HasValue, item => item.Data1.Id == Id)
         .WhereIf(Name, item => item.Data1.Name == Name)
-        .Select(item => new ReturnModel
+        .SelectValue((f, s) => new ReturnModel
         {
-            Id = item.Data1.Id,
-            Name = item.Data1.Name,
-            Age = item.Data2.Age.ToString(),
+            Id = f.Id,
+            Name = f.Name,
+            Age = s.Age.ToString(),
         });
     }
 }
@@ -115,9 +111,8 @@ public class FirstJoinGetDto2 : BaseJoinGet<FirstEntity, ReturnModel>
     public long? Id { get; set; }
     public override IQueryable<ReturnModel> GetQuery(IRepository<FirstEntity> repo)
     {
-        return repo.CreateJoin()
+        return repo
         .LeftJoin<SecondEntity>(i => i.Name, i => i.Description)
-        .Query
         .WhereIf(Id.HasValue, item => item.Data1.Id == Id)
         .Select(item => new ReturnModel
         {
@@ -131,10 +126,6 @@ public class FirstJoinGetDto2 : BaseJoinGet<FirstEntity, ReturnModel>
 public class ReturnModel
 {
     public long? Id { get; set; }
-    /// <summary>
-    /// 1242349523y689
-    /// </summary>
-    /// <value></value>
     public string Name { get; set; }
     public string Age { get; set; }
 }
