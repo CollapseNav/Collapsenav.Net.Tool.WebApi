@@ -2,7 +2,7 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IQueryController<T, GetT> : INoConstraintsQueryController<T, GetT>, IReadController<T>
+public interface IQueryController<T, GetT> : INoConstraintsQueryController<T, GetT>
     where T : class, IEntity
     where GetT : IBaseGet<T>
 {

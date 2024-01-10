@@ -1,7 +1,7 @@
 using Collapsenav.Net.Tool.Data;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IQueryApplication<T, GetT> : INoConstraintsQueryApplication<T, GetT>, IReadApplication<T>
+public interface IQueryApplication<T, GetT> : INoConstraintsQueryApplication<T, GetT>
     where T : class, IEntity
     where GetT : IBaseGet<T>
 {

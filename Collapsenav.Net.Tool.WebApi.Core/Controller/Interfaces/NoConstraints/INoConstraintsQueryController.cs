@@ -3,8 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
 
-public interface INoConstraintsQueryController<T, GetT> : INoConstraintsReadController<T>
+public interface INoConstraintsQueryController<T, GetT> : IController
 {
+    /// <summary>
+    /// 查找(单个 id)
+    /// </summary>
+    [HttpGet, Route("{id}")]
+    Task<T?> QueryAsync(string? id);
     /// <summary>
     /// 带条件分页
     /// </summary>

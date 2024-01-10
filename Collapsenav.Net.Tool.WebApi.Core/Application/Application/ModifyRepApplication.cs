@@ -1,7 +1,7 @@
 using Collapsenav.Net.Tool.Data;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyApplication<T, CreateT>
+public class ModifyRepApplication<T, CreateT> : Application<T>, IModifyApplication<T, CreateT>
     where T : class, IEntity
     where CreateT : IBaseCreate<T>
 {
@@ -54,5 +54,21 @@ public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyA
             return 0;
         data.SetKeyValue(id);
         return await Repo.UpdateAsync(data);
+    }
+    public virtual async Task<T?> AddAsync(T? entity) => await Repo.AddAsync(entity);
+
+    public virtual async Task<bool> DeleteAsync<TKey>(TKey? id, bool isTrue = false) => await Repo.DeleteAsync(id, isTrue);
+    public void Dispose() => Repo.Save();
+
+    public virtual void Save() => Repo.Save();
+
+    public virtual async Task SaveAsync() => await Repo.SaveAsync();
+
+    public virtual async Task<int> UpdateAsync(string? id, T? entity)
+    {
+        var tid = id?.ToValue(Repo.KeyType() ?? throw new Exception(""));
+        var prop = Repo.KeyProp() ?? throw new Exception("");
+        entity.SetValue(prop.Name, tid);
+        return await Repo.UpdateAsync(entity);
     }
 }

@@ -7,7 +7,7 @@ public class DIConfig
     public static ServiceProvider GetProvider()
     {
         return new ServiceCollection()
-        .AddSqlite<TestDbContext>("Test.db")
+        .AddSqlite<TestDbContext>(new SqliteConn("Test.db").ToString())
         .AddDefaultDbContext<TestDbContext>()
         .AddRepController()
         .AddAutoMapper()
@@ -16,7 +16,7 @@ public class DIConfig
     public static ServiceProvider GetNotBaseProvider()
     {
         return new ServiceCollection()
-        .AddSqlite<TestNotBaseDbContext>("Test.db")
+        .AddSqlite<TestNotBaseDbContext>(new SqliteConn("Test.db").ToString())
         .AddDefaultDbContext<TestNotBaseDbContext>()
         .AddRepController()
         .AddMap<MappingProfile>()
@@ -26,7 +26,7 @@ public class DIConfig
     public static ServiceProvider GetAppProvider()
     {
         return new ServiceCollection()
-        .AddSqlite<TestDbContext>("TestApp.db")
+        .AddSqlite<TestDbContext>(new SqliteConn("TestApp.db").ToString())
         .AddDefaultDbContext<TestDbContext>()
         .AddAppController()
         .BuildServiceProvider();
@@ -34,7 +34,7 @@ public class DIConfig
     public static ServiceProvider GetNotBaseAppProvider()
     {
         return new ServiceCollection()
-        .AddSqlite<TestNotBaseDbContext>("TestApp.db")
+        .AddSqlite<TestNotBaseDbContext>(new SqliteConn("TestApp.db").ToString())
         .AddMap(typeof(MappingProfile))
         .AddDefaultDbContext<TestNotBaseDbContext>()
         .AddAppController()

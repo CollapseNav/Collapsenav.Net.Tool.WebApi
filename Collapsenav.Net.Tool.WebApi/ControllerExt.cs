@@ -25,7 +25,6 @@ public static class ControllerExt
     {
         services
         .AddRepository()
-        .AddScoped(typeof(ISimpleController<>), typeof(SimpleReqController<>))
         .AddScoped(typeof(IModifyController<,>), typeof(ModifyRepController<,>))
         .AddScoped(typeof(IQueryController<,>), typeof(QueryRepController<,>))
         .AddScoped(typeof(ICrudController<,,>), typeof(CrudRepController<,,>))
@@ -45,11 +44,9 @@ public static class ControllerExt
         .AddScoped(typeof(IModifyController<,>), typeof(ModifyAppController<,>))
         .AddScoped(typeof(IQueryController<,>), typeof(QueryAppController<,>))
         .AddScoped(typeof(ICrudController<,,>), typeof(CrudAppController<,,>))
-        .AddScoped(typeof(ISimpleController<>), typeof(SimpleAppController<>))
         .AddScoped(typeof(ModifyAppController<,>))
         .AddScoped(typeof(QueryAppController<,>))
         .AddScoped(typeof(CrudAppController<,,>))
-        .AddScoped(typeof(SimpleAppController<>))
         .AddMap()
         // .AddDynamicController()
         ;
@@ -63,11 +60,8 @@ public static class ControllerExt
     {
         services
         .AddRepository()
-        .AddScoped(typeof(ISimpleApplication<>), typeof(SimpleApplication<>))
         .AddScoped(typeof(IModifyApplication<,>), typeof(ModifyRepApplication<,>))
         .AddScoped(typeof(IQueryApplication<,>), typeof(QueryRepApplication<,>))
-        .AddScoped(typeof(ICheckExistApplication<>), typeof(ReadRepApplication<>))
-        .AddScoped(typeof(ICountApplication<>), typeof(ReadRepApplication<>))
         .AddScoped(typeof(ICrudApplication<,,>), typeof(CrudRepApplication<,,>))
         .AddMap()
         .AddDynamicController()

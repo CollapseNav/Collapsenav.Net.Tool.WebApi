@@ -2,8 +2,12 @@ using Collapsenav.Net.Tool.Data;
 
 namespace Collapsenav.Net.Tool.WebApi;
 
-public interface INoConstraintsQueryApplication<T, GetT> : INoConstraintsReadApplication<T>
+public interface INoConstraintsQueryApplication<T, GetT> : IApplication<T>
 {
+    /// <summary>
+    /// 查找(单个 id)
+    /// </summary>
+    Task<T?> GetByIdAsync<TKey>(TKey? id);
     /// <summary>
     /// 获取query
     /// </summary>

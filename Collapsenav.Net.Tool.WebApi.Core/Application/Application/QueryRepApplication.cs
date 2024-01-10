@@ -1,7 +1,8 @@
+using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
 namespace Collapsenav.Net.Tool.WebApi;
 
-public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplication<T, GetT>
+public class QueryRepApplication<T, GetT> : Application<T>, IQueryApplication<T, GetT>
     where T : class, IEntity
     where GetT : IBaseGet<T>
 {
@@ -41,5 +42,8 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplica
             return input?.GetQuery(Repo) ?? Enumerable.Empty<ReturnT>();
         });
     }
+    public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>>? exp) => await Repo.IsExistAsync(exp);
+    public virtual async Task<int> CountAsync(Expression<Func<T, bool>>? exp = null) => await Repo.CountAsync(exp);
+    public virtual async Task<T?> GetByIdAsync<TKey>(TKey? id) => await Repo.GetByIdAsync(id);
     public virtual async Task<IEnumerable<T>> QueryByIdsAsync<TKey>(IEnumerable<TKey>? ids) => await Repo.QueryByIdsAsync(ids);
 }
