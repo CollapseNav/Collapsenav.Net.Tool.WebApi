@@ -2,7 +2,7 @@
     <Import Project="../version.props" />
     <PropertyGroup>
         <PackageTags>Tools,WebApi</PackageTags>
-        <TargetFrameworks>net6.0;netcoreapp3.1;</TargetFrameworks>
+        <TargetFrameworks>net8.0;net6.0;netcoreapp3.1;</TargetFrameworks>
         <Description>
 提供一些带有简单实现的Controller
         </Description>

@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
 namespace Collapsenav.Net.Tool.WebApi;
 
-public class QueryRepApplication<T, GetT> : Application<T>, IQueryApplication<T, GetT>
+public class QueryRepApplication<T, GetT> : Application<T>, IQueryApplication<T, GetT>, ICountApplication<T>, ICheckExistApplication<T>
     where T : class, IEntity
     where GetT : IBaseGet<T>
 {

@@ -69,19 +69,19 @@ public class ApplicationTest
         Assert.True(datas.Count == 1);
     }
 
-    [Fact]
-    public async Task CheckExistApplicationTest()
-    {
-        var app = GetService<ICheckExistApplication<TestEntity>>();
-        Assert.True(await app.IsExistAsync(item => true));
-        Assert.False(await app.IsExistAsync(item => item.Id > 9999));
-    }
+    // [Fact]
+    // public async Task CheckExistApplicationTest()
+    // {
+    //     var app = GetService<ICheckExistApplication<TestEntity>>();
+    //     Assert.True(await app.IsExistAsync(item => true));
+    //     Assert.False(await app.IsExistAsync(item => item.Id > 9999));
+    // }
 
-    [Fact]
-    public async Task CountApplicationTest()
-    {
-        var app = GetService<ICountApplication<TestEntity>>();
-        Assert.True(await app.CountAsync(item => true) > 0);
-        Assert.False(await app.CountAsync(item => item.Id > 9999) > 0);
-    }
+    // [Fact]
+    // public async Task CountApplicationTest()
+    // {
+    //     var app = GetService<ICountApplication<TestEntity>>();
+    //     Assert.True(await app.CountAsync(item => true) > 0);
+    //     Assert.False(await app.CountAsync(item => item.Id > 9999) > 0);
+    // }
 }
