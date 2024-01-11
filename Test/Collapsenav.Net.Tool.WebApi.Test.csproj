@@ -25,6 +25,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Collapsenav.Net.Tool.WebApi\Collapsenav.Net.Tool.WebApi.csproj"/>
+        <ProjectReference Include="..\Collapsenav.Net.Tool.WebApi.Core\Collapsenav.Net.Tool.WebApi.Core.csproj"/>
         <None Include="./Test.db" CopyToOutputDirectory="Always"/>
         <None Include="./TestApp.db" CopyToOutputDirectory="Always"/>
     </ItemGroup>

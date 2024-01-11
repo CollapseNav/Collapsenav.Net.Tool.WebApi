@@ -37,10 +37,7 @@ public class QueryRepApplication<T, GetT> : Application<T>, IQueryApplication<T,
     }
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(IBaseGet<T, ReturnT>? input)
     {
-        return await Task.Factory.StartNew(() =>
-        {
-            return input?.GetQuery(Repo) ?? Enumerable.Empty<ReturnT>();
-        });
+        return input == null ? Enumerable.Empty<ReturnT>() : await Repo.QueryAsync(input.GetQuery(Repo));
     }
     public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>>? exp) => await Repo.IsExistAsync(exp);
     public virtual async Task<int> CountAsync(Expression<Func<T, bool>>? exp = null) => await Repo.CountAsync(exp);
