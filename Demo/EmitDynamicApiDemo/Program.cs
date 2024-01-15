@@ -26,11 +26,8 @@ app.Run();
 [DynamicApi]
 public class TestApi
 {
+    [AutoInject]
     public IRepository<FirstEntity> FirstRepo { get; set; }
-    public TestApi(IRepository<FirstEntity> firstRepo)
-    {
-        FirstRepo = firstRepo;
-    }
 
     public string QueryBBBB()
     {
@@ -100,9 +97,9 @@ public class FirstJoinGetDto : BaseJoinGet<FirstEntity, ReturnModel>
         .WhereIf(Name, item => item.Data1.Name == Name)
         .SelectValue((f, s) => new ReturnModel
         {
-            Id = f.Id,
-            Name = f.Name,
-            Age = s.Age.ToString(),
+            Id = f?.Id,
+            Name = f?.Name,
+            Age = s?.Age.ToString(),
         });
     }
 }

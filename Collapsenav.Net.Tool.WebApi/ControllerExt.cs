@@ -1,23 +1,9 @@
 using AutoMapper;
 using Collapsenav.Net.Tool.Data;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 namespace Collapsenav.Net.Tool.WebApi;
 public static class ControllerExt
 {
-    /// <summary>
-    /// 添加动态controller支持
-    /// </summary>
-    public static IServiceCollection AddDynamicController(this IServiceCollection services)
-    {
-        if (services.Any(item => item.ServiceType == typeof(AddControllerChangeProvider)))
-            return services;
-        return services
-        .AddMap()
-        .AddSingleton<IActionDescriptorChangeProvider>(AddControllerChangeProvider.Instance)
-        // .AddSingleton(AddControllerChangeProvider.Instance)
-        .AddHostedService<ChangeActionService>();
-    }
     /// <summary>
     /// 注册泛型controller(基于Repository)
     /// </summary>
@@ -28,6 +14,9 @@ public static class ControllerExt
         .AddScoped(typeof(IModifyController<,>), typeof(ModifyRepController<,>))
         .AddScoped(typeof(IQueryController<,>), typeof(QueryRepController<,>))
         .AddScoped(typeof(ICrudController<,,>), typeof(CrudRepController<,,>))
+        .AddScoped(typeof(ModifyRepController<,>))
+        .AddScoped(typeof(QueryRepController<,>))
+        .AddScoped(typeof(CrudRepController<,,>))
         .AddMap()
         // .AddDynamicController()
         ;
@@ -44,6 +33,9 @@ public static class ControllerExt
         .AddScoped(typeof(IModifyController<,>), typeof(ModifyAppController<,>))
         .AddScoped(typeof(IQueryController<,>), typeof(QueryAppController<,>))
         .AddScoped(typeof(ICrudController<,,>), typeof(CrudAppController<,,>))
+        .AddScoped(typeof(ModifyAppController<,>))
+        .AddScoped(typeof(QueryAppController<,>))
+        .AddScoped(typeof(CrudAppController<,,>))
         .AddMap()
         // .AddDynamicController()
         ;
@@ -60,8 +52,11 @@ public static class ControllerExt
         .AddScoped(typeof(IModifyApplication<,>), typeof(ModifyRepApplication<,>))
         .AddScoped(typeof(IQueryApplication<,>), typeof(QueryRepApplication<,>))
         .AddScoped(typeof(ICrudApplication<,,>), typeof(CrudRepApplication<,,>))
+        .AddScoped(typeof(ModifyRepApplication<,>))
+        .AddScoped(typeof(QueryRepApplication<,>))
+        .AddScoped(typeof(CrudRepApplication<,,>))
         .AddMap()
-        .AddDynamicController()
+        // .AddDynamicController()
         ;
         return services;
     }
