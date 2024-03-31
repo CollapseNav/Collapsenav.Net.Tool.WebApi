@@ -110,31 +110,35 @@ public static class DynamicApiExt
             List<Type> getTypes = new();
             List<Type> getPageTypes = new();
             DynamicController? controller = null;
-            // 找到继承IBaseGet和IBaseCreate的类型
-            if (controllerGroup.Any(i => i.IsType(typeof(IBaseGet))))
-            {
-                foreach (var cg in controllerGroup.Where(i => i.IsType(typeof(IBaseGet))).ToList())
-                {
-                    if (cg.GetCustomAttribute<MapControllerAttribute>()!.IsPage)
-                        getPageTypes.Add(cg);
-                    else
-                        getTypes.Add(cg);
-                }
-                if (getTypes.Count == 1)
-                    getType = getTypes.First();
-                else if (getTypes.NotEmpty())
-                    getType = getTypes.First(i => i.IsType(typeof(IBaseGet)) && !i.IsType(typeof(IBaseJoinGet<,>)));
-                if (getPageTypes.Count == 1)
-                    getType = getPageTypes.First();
-                else if (getPageTypes.NotEmpty())
-                    getType = getPageTypes.First(i => i.IsType(typeof(IBaseGet)) && !i.IsType(typeof(IBaseJoinGet<,>)));
-                getTypes = getTypes.Where(i => i != getType).ToList();
-                getPageTypes = getPageTypes.Where(i => i != getType).ToList();
-            }
+
             if (controllerGroup.Any(i => i.IsType(typeof(IBaseCreate))))
             {
                 createType = controllerGroup.First(i => i.IsType(typeof(IBaseCreate)));
             }
+
+            // 找到继承IBaseGet和IBaseCreate的类型
+            if (controllerGroup.Any(i => i.IsType(typeof(IBaseGet))))
+            {
+                getTypes = controllerGroup.Where(i => i.IsType(typeof(IBaseGet))).ToList();
+                if (getTypes.Count == 1 && !getTypes.First().IsType(typeof(IBaseJoinGet<,>)))
+                {
+                    getType = getTypes.First();
+                    getTypes = getTypes.Where(i => i != getType).ToList();
+                }
+
+                foreach (var cg in getTypes)
+                    if (cg.GetCustomAttribute<MapControllerAttribute>()!.IsPage)
+                        getPageTypes.Add(cg);
+                getTypes = getTypes.Except(getPageTypes).ToList();
+
+                if (getTypes.NotEmpty())
+                    getType = getTypes.First(i => i.IsType(typeof(IBaseGet)) && !i.IsType(typeof(IBaseJoinGet<,>)));
+
+                if (getPageTypes.NotEmpty())
+                    getType = getPageTypes.First(i => i.IsType(typeof(IBaseGet)) && !i.IsType(typeof(IBaseJoinGet<,>)));
+            }
+
+
             // 首先是必须要有个get
             if (getType == null)
                 continue;
