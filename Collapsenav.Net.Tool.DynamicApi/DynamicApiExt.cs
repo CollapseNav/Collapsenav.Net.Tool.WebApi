@@ -107,11 +107,34 @@ public static class DynamicApiExt
             Type? entityType = null;
             Type? getType = null;
             Type? createType = null;
+            List<Type> getTypes = new();
+            List<Type> getPageTypes = new();
+            DynamicController? controller = null;
             // 找到继承IBaseGet和IBaseCreate的类型
             if (controllerGroup.Any(i => i.IsType(typeof(IBaseGet))))
-                getType = controllerGroup.First(i => i.IsType(typeof(IBaseGet)));
+            {
+                foreach (var cg in controllerGroup.Where(i => i.IsType(typeof(IBaseGet))).ToList())
+                {
+                    if (cg.GetCustomAttribute<MapControllerAttribute>()!.IsPage)
+                        getPageTypes.Add(cg);
+                    else
+                        getTypes.Add(cg);
+                }
+                if (getTypes.Count == 1)
+                    getType = getTypes.First();
+                else if (getTypes.NotEmpty())
+                    getType = getTypes.First(i => i.IsType(typeof(IBaseGet)) && !i.IsType(typeof(IBaseJoinGet<,>)));
+                if (getPageTypes.Count == 1)
+                    getType = getPageTypes.First();
+                else if (getPageTypes.NotEmpty())
+                    getType = getPageTypes.First(i => i.IsType(typeof(IBaseGet)) && !i.IsType(typeof(IBaseJoinGet<,>)));
+                getTypes = getTypes.Where(i => i != getType).ToList();
+                getPageTypes = getPageTypes.Where(i => i != getType).ToList();
+            }
             if (controllerGroup.Any(i => i.IsType(typeof(IBaseCreate))))
+            {
                 createType = controllerGroup.First(i => i.IsType(typeof(IBaseCreate)));
+            }
             // 首先是必须要有个get
             if (getType == null)
                 continue;
@@ -119,7 +142,7 @@ public static class DynamicApiExt
             else if (createType == null)
             {
                 entityType = getType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
-                services.AddQueryController(entityType, getType, controllerGroup.Key);
+                controller = services.AddQueryController(entityType, getType, controllerGroup.Key);
             }
             // 如果有create，则认为是增删改查controller
             else if (createType != null)
@@ -128,9 +151,28 @@ public static class DynamicApiExt
                 var createEntityType = createType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
                 // 此时需要保证get和create的实体类型一致
                 if (entityType == createEntityType)
-                    services.AddCrudController(entityType, createType, getType, controllerGroup.Key);
+                    controller = services.AddCrudController(entityType, createType, getType, controllerGroup.Key);
                 else
                     continue;
+            }
+
+            if (getTypes.NotEmpty())
+            {
+                foreach (var get in getTypes)
+                {
+                    var actionRoute = get.GetCustomAttribute<MapControllerAttribute>()!.ActionName;
+                    if (actionRoute.NotEmpty())
+                        controller!.AddGetAction(get, actionRoute);
+                }
+            }
+            if (getPageTypes.NotEmpty())
+            {
+                foreach (var getPage in getPageTypes)
+                {
+                    var actionRoute = getPage.GetCustomAttribute<MapControllerAttribute>()!.ActionName;
+                    if (actionRoute.NotEmpty())
+                        controller!.AddPageAction(getPage, actionRoute);
+                }
             }
         }
         return services;

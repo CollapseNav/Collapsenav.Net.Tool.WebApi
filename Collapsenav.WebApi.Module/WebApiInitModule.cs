@@ -19,6 +19,7 @@ public class WebApiInitModule : InitModule
     {
         services.AddControllers().AddControllersAsServices();
         services.AddDynamicWebApi().AddRepController().AddAppController();
+        services.AddAutoController();
         services.AddDefaultSwaggerGen();
         services.AddAutoInjectController();
     }

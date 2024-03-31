@@ -11,7 +11,6 @@ builder.LoadModules();
 // builder.Services.AddCrudController<FirstEntity, FirstCreateDto, FirstGetDto>("testdy")
 // .AddGetAction<FirstJoinGetDto>("QueryNew")
 // .AddGetAction<FirstJoinGetDto2>("QueryTTTT");
-builder.Services.AddAutoController();
 builder.Services.AddSqlitePool<EntityContext>(new SqliteConn("./Data.db"));
 builder.Services.AddDefaultDbContext<EntityContext>();
 
@@ -25,7 +24,7 @@ app.Run();
 public class TestApi
 {
     [AutoInject]
-    public IRepository<FirstEntity> FirstRepo { get; set; }
+    public IRepository<FirstEntity>? FirstRepo { get; set; }
 
     public string QueryBBBB()
     {
@@ -64,9 +63,9 @@ public class SecondEntity : BaseEntity<long?>
 public class FirstCreateDto : BaseCreate<FirstEntity>
 {
     public long? Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public override bool IsExist(IQueryable<FirstEntity> rep)
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public override bool IsExist(IQueryable<FirstEntity>? rep)
     {
         return rep.WhereIf(Name, item => item.Name == Name).Any();
     }
@@ -86,6 +85,7 @@ public class FirstGetDto : BaseGet<FirstEntity>
         ;
     }
 }
+[MapController("testdy", "QueryNew", false)]
 public class FirstJoinGetDto : BaseJoinGet<FirstEntity, ReturnModel>
 {
     public long? Id { get; set; }
@@ -124,8 +124,8 @@ public class FirstJoinGetDto2 : BaseJoinGet<FirstEntity, ReturnModel>
 public class ReturnModel
 {
     public long? Id { get; set; }
-    public string Name { get; set; }
-    public string Age { get; set; }
+    public string? Name { get; set; }
+    public string? Age { get; set; }
 }
 
 #endregion
