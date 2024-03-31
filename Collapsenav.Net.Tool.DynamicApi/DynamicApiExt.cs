@@ -1,3 +1,4 @@
+using System.Reflection;
 using Collapsenav.Net.Tool.Data;
 using Collapsenav.Net.Tool.WebApi;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,12 @@ public static class DynamicApiExt
         ApplicationServiceConvention.DynamicControllers.Add(controller);
         return controller;
     }
+    internal static DynamicController AddController(this IServiceCollection services, Type controllerType, string route)
+    {
+        var controller = new DynamicController(controllerType, route);
+        ApplicationServiceConvention.DynamicControllers.Add(controller);
+        return controller;
+    }
     public static DynamicController AddQueryController<Entity, GetDto>(this IServiceCollection services, string route)
         where Entity : class, IEntity
         where GetDto : IBaseGet<Entity>
@@ -73,5 +80,59 @@ public static class DynamicApiExt
         where CreateDto : IBaseCreate<Entity>
     {
         return services.AddController<CrudAppController<Entity, CreateDto, GetDto>>(route);
+    }
+
+    public static DynamicController AddQueryController(this IServiceCollection services, Type entityType, Type getDtoType, string route)
+    {
+        var controller = new DynamicController(entityType, getDtoType, route);
+        ApplicationServiceConvention.DynamicControllers.Add(controller);
+        return controller;
+    }
+    public static DynamicController AddCrudController(this IServiceCollection services, Type entityType, Type createDtoType, Type getDtoType, string route)
+    {
+        var controller = new DynamicController(entityType, createDtoType, getDtoType, route);
+        ApplicationServiceConvention.DynamicControllers.Add(controller);
+        return controller;
+    }
+
+    public static IServiceCollection AddAutoController(this IServiceCollection services)
+    {
+        // 先查出所有的继承IBaseGet和IBaseCreate的类型
+        var types = AppDomain.CurrentDomain.GetTypes(typeof(IBaseGet), typeof(IBaseCreate));
+        // 然后根据MapControllerAttribute的Value分组（就是controller的路由）
+        var controllerGroups = types.Where(i => i.HasAttribute<MapControllerAttribute>()).GroupBy(i => i.GetCustomAttribute<MapControllerAttribute>()!.Value).ToList();
+        // 然后创建对应的controller
+        foreach (var controllerGroup in controllerGroups)
+        {
+            Type? entityType = null;
+            Type? getType = null;
+            Type? createType = null;
+            // 找到继承IBaseGet和IBaseCreate的类型
+            if (controllerGroup.Any(i => i.IsType(typeof(IBaseGet))))
+                getType = controllerGroup.First(i => i.IsType(typeof(IBaseGet)));
+            if (controllerGroup.Any(i => i.IsType(typeof(IBaseCreate))))
+                createType = controllerGroup.First(i => i.IsType(typeof(IBaseCreate)));
+            // 首先是必须要有个get
+            if (getType == null)
+                continue;
+            // 如果没有create，则认为是查询controller
+            else if (createType == null)
+            {
+                entityType = getType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
+                services.AddQueryController(entityType, getType, controllerGroup.Key);
+            }
+            // 如果有create，则认为是增删改查controller
+            else if (createType != null)
+            {
+                entityType = getType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
+                var createEntityType = createType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
+                // 此时需要保证get和create的实体类型一致
+                if (entityType == createEntityType)
+                    services.AddCrudController(entityType, createType, getType, controllerGroup.Key);
+                else
+                    continue;
+            }
+        }
+        return services;
     }
 }

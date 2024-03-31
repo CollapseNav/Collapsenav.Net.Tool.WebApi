@@ -1,5 +1,8 @@
 namespace Collapsenav.Net.Tool.DynamicApi;
 
+/// <summary>
+/// 自定义的Api配置
+/// </summary>
 public class ApiJsonConfig
 {
     public string? ApiGet { get; set; }

@@ -8,9 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.LoadModules();
-builder.Services.AddCrudController<FirstEntity, FirstCreateDto, FirstGetDto>("testdy")
-.AddGetAction<FirstJoinGetDto>("QueryNew")
-.AddGetAction<FirstJoinGetDto2>("QueryTTTT");
+// builder.Services.AddCrudController<FirstEntity, FirstCreateDto, FirstGetDto>("testdy")
+// .AddGetAction<FirstJoinGetDto>("QueryNew")
+// .AddGetAction<FirstJoinGetDto2>("QueryTTTT");
+builder.Services.AddAutoController();
 builder.Services.AddSqlitePool<EntityContext>(new SqliteConn("./Data.db"));
 builder.Services.AddDefaultDbContext<EntityContext>();
 
@@ -59,6 +60,7 @@ public class SecondEntity : BaseEntity<long?>
     public string? Description { get; set; }
 }
 
+[MapController("testdy")]
 public class FirstCreateDto : BaseCreate<FirstEntity>
 {
     public long? Id { get; set; }
@@ -69,6 +71,7 @@ public class FirstCreateDto : BaseCreate<FirstEntity>
         return rep.WhereIf(Name, item => item.Name == Name).Any();
     }
 }
+[MapController("testdy")]
 public class FirstGetDto : BaseGet<FirstEntity>
 {
     public long? Id { get; set; }

@@ -30,7 +30,6 @@ public class DynamicAction
             return null;
         return new DynamicAction(info);
     }
-
     public MethodInfo? MethodInfo { get; }
     public RouteAttribute? Route { get; set; }
     public List<Attribute> ExtraAttributes { get; } = new();

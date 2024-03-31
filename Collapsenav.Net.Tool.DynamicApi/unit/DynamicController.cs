@@ -28,6 +28,12 @@ public class DynamicController
         ControllerType = controllerType;
         Actions.AddRange(controllerType.GetMethods().Select(item => DynamicAction.GetDynamicAction(item)).Where(item => item != null).Select(item => item!));
     }
+    public DynamicController(Type entityType, Type getType, string route) : this(typeof(QueryRepController<,>).MakeGenericType(entityType, getType), route)
+    {
+    }
+    public DynamicController(Type entityType, Type createType, Type getType, string route) : this(typeof(CrudRepController<,,>).MakeGenericType(entityType, createType, getType), route)
+    {
+    }
     public DynamicController(Type controllerType, string route) : this(controllerType)
     {
         Route = new RouteAttribute(route);
