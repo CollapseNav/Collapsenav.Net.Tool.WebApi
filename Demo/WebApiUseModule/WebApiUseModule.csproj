@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Dto/Dto.csproj" />
     <ProjectReference Include="../../Collapsenav.WebApi.Module/Collapsenav.WebApi.Module.csproj" />
+    <ProjectReference Include="../../../Collapsenav.Net.Tool.Data/Collapsenav.Data.Module/Collapsenav.Data.Module.csproj" />
   </ItemGroup>
 
 </Project>
