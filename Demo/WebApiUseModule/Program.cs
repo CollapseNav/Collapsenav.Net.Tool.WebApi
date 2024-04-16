@@ -1,14 +1,13 @@
+using Collapsenav.Module;
 using Collapsenav.Net.Tool;
 using Collapsenav.Net.Tool.Data;
 using Collapsenav.Net.Tool.DynamicApi;
 using Collapsenav.Net.Tool.WebApi;
 using Collapsenav.WebApi.Module;
 using Microsoft.EntityFrameworkCore;
-var builder = WebApplication.CreateBuilder(args);
-builder.LoadModules();
+var builder = WebApplication.CreateBuilder(args).LoadModules();
 var app = builder.Build();
-app.UseAutoCommit();
-if (app.Environment.IsDevelopment()) app.UseSwagger().UseSwaggerUI();
+app.UseModules();
 app.MapControllers();
 app.Run();
 public class EntityContext : DbContext
@@ -53,7 +52,7 @@ public class FirstGetDto : BaseGet<FirstEntity>
         .WhereIf(Description, item => item.Description.Contains(Description))
         ;
 }
-[MapController("testdy", "QueryNew", false)]
+[MapController("testdy", "QueryNew", true)]
 public class FirstJoinGetDto : BaseJoinGet<FirstEntity, ReturnModel>
 {
     public long? Id { get; set; }

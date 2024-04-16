@@ -5,6 +5,7 @@ using Collapsenav.Net.Tool.DynamicApi;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
 
 namespace Collapsenav.WebApi.Module;
 
@@ -28,5 +29,10 @@ public class WebApiInitModule : InitModule
         if (hostBuilder is null)
             return;
         hostBuilder.UseAutoInjectProviderFactory();
+    }
+
+    public override void Use(IApplicationBuilder app, IConfiguration? configuration = null, IHostEnvironment? environment = null)
+    {
+        app.UseSwagger().UseSwaggerUI();
     }
 }
