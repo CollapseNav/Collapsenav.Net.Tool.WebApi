@@ -3,9 +3,7 @@ using Collapsenav.Net.Tool.Data;
 using Collapsenav.Net.Tool.WebApi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-
 namespace Collapsenav.Net.Tool.DynamicApi;
-
 public static class DynamicApiExt
 {
     internal static bool HasControllerRoute { get; set; } = false;
@@ -149,8 +147,8 @@ public static class DynamicApiExt
         // 先查出所有的继承IBaseGet和IBaseCreate的类型, 作为泛型参数
         var markedTypes = AppDomain.CurrentDomain.GetTypes(typeof(IBaseGet), typeof(IBaseCreate));
         // 然后根据MapControllerAttribute的Value分组（就是controller的路由）
-        var controllerGroups = markedTypes.Where(i => i.HasAttribute<MapControllerAttribute>())
-                            .GroupBy(i => i.GetCustomAttribute<MapControllerAttribute>()!.Value).ToList();
+        var controllerGroups = markedTypes.Where(i => i.CustomAttributes.Any(t => t.AttributeType.IsType<MapControllerAttribute>()))
+                            .GroupBy(i => i.GetCustomAttribute<MapControllerAttribute>(true)!.Value).ToList();
         // 然后创建对应的controller
         foreach (var (route, types) in controllerGroups.Select(i => (i.Key, i.ToList())))
         {
@@ -158,19 +156,17 @@ public static class DynamicApiExt
                 continue;
             var createTypes = types.Where(i => i.IsType<IBaseCreate>()).ToList();
             var getTypes = types.Where(i => i.IsType<IBaseGet>()).ToList();
-            Type? entityType = null;
             Type? getType = null;
             Type? createType = null;
             List<Type> getPageTypes = new();
-            DynamicController? controller = null;
+            DynamicController controller;
 
-            if (createTypes.Any(i => i.IsType(typeof(IBaseCreate))))
-            {
-                createType = createTypes.First(i => i.IsType(typeof(IBaseCreate)));
-            }
+            // 暂时假定每个route下都只有一个create
+            if (createTypes.Any())
+                createType = createTypes.First();
 
-            // 找到继承IBaseGet和IBaseCreate的类型
-            if (types.Any(i => i.IsType(typeof(IBaseGet))))
+            // 找到继承IBaseGet和IBaseJoin的类型
+            if (getTypes.Any())
             {
                 if (getTypes.Count == 1 && !getTypes.First().IsType(typeof(IBaseJoinGet<,>)))
                 {
@@ -190,47 +186,80 @@ public static class DynamicApiExt
                     getType = getPageTypes.First(i => i.IsType(typeof(IBaseGet)) && !i.IsType(typeof(IBaseJoinGet<,>)));
             }
 
-
             // 首先是必须要有个get
             if (getType == null)
                 continue;
-            // 如果没有create，则认为是查询controller
-            else if (createType == null)
-            {
-                entityType = getType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
-                controller = services.AddQueryController(entityType, getType, route);
-            }
-            // 如果有create，则认为是增删改查controller
-            else if (createType != null)
-            {
-                entityType = getType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
-                var createEntityType = createType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
-                // 此时需要保证get和create的实体类型一致
-                if (entityType == createEntityType)
-                    controller = services.AddCrudController(entityType, createType, getType, route);
-                else
-                    continue;
-            }
-
-            if (getTypes.NotEmpty())
-            {
-                foreach (var get in getTypes)
-                {
-                    var actionRoute = get.GetCustomAttribute<MapControllerAttribute>()!.ActionName;
-                    if (actionRoute.NotEmpty())
-                        controller!.AddGetAction(get, actionRoute);
-                }
-            }
-            if (getPageTypes.NotEmpty())
-            {
-                foreach (var getPage in getPageTypes)
-                {
-                    var actionRoute = getPage.GetCustomAttribute<MapControllerAttribute>()!.ActionName;
-                    if (actionRoute.NotEmpty())
-                        controller!.AddPageAction(getPage, actionRoute);
-                }
-            }
+            else
+                controller = GetController(services, getType, createType, route);
+            AddGetAction(controller, getTypes);
+            AddGetPageAction(controller, getPageTypes);
         }
         return services;
+    }
+
+    /// <summary>
+    /// 创建基础的controller
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="getType"></param>
+    /// <param name="createType"></param>
+    /// <param name="route"></param>
+    /// <returns></returns>
+    private static DynamicController GetController(IServiceCollection services, Type getType, Type? createType, string route)
+    {
+        var entityType = getType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
+        if (createType == null)
+            return services.AddQueryController(entityType, getType, route);
+        else
+        {
+            var createEntityType = createType.BaseType!.GenericTypeArguments.First(i => i.IsType(typeof(IEntity)));
+            // 此时需要保证get和create的实体类型一致
+            return services.AddCrudController(entityType, createType, getType, route);
+        }
+    }
+    /// <summary>
+    /// 添加普通的列表接口
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="types"></param>
+    /// <param name="attributes"></param>
+    private static void AddGetPageAction(DynamicController controller, IEnumerable<Type> types, List<Attribute>? attributes = null)
+    {
+        if (types.IsEmpty())
+            return;
+        attributes = new List<Attribute>();
+        foreach (var type in types)
+        {
+            var actionRoute = type.GetCustomAttribute<MapControllerAttribute>()!.ActionName;
+            var attr = type.GetCustomAttribute<MapControllerAttribute>();
+            if (attr is MapGetAttribute)
+            {
+                attributes.Add(new HttpGetAttribute(actionRoute));
+            }
+            else if (attr is MapPostAttribute)
+            {
+                attributes.Add(new HttpPostAttribute(actionRoute));
+            }
+            if (actionRoute.NotEmpty())
+                controller.AddPageAction(type, actionRoute, attributes.ToArray());
+        }
+    }
+    /// <summary>
+    /// 添加分页列表接口
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="types"></param>
+    /// <param name="attributes"></param>
+    private static void AddGetAction(DynamicController controller, IEnumerable<Type> types, List<Attribute>? attributes = null)
+    {
+        if (types.IsEmpty())
+            return;
+        attributes = new List<Attribute>();
+        foreach (var type in types)
+        {
+            var actionRoute = type.GetCustomAttribute<MapControllerAttribute>()!.ActionName;
+            if (actionRoute.NotEmpty())
+                controller.AddGetAction(type, actionRoute, attributes.ToArray());
+        }
     }
 }

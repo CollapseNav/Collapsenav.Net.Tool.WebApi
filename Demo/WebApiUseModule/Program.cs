@@ -52,7 +52,7 @@ public class FirstGetDto : BaseGet<FirstEntity>
         .WhereIf(Description, item => item.Description.Contains(Description))
         ;
 }
-[MapController("testdy", "QueryNew", true)]
+[MapGet("testdy", "New", true)]
 public class FirstJoinGetDto : BaseJoinGet<FirstEntity, ReturnModel>
 {
     public long? Id { get; set; }

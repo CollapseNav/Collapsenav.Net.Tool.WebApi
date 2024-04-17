@@ -75,7 +75,7 @@ public class DynamicController
         }
         return cm;
     }
-    public DynamicController AddPageAction(Type actionType, string route)
+    public DynamicController AddPageAction(Type actionType, string route, Attribute[]? attributes = null)
     {
         var interfaces = actionType.GetInterfaces().Where(item => item.IsGenericType && item.GenericTypeArguments.Length == 2).ToArray();
         if (interfaces.IsEmpty())
@@ -86,17 +86,17 @@ public class DynamicController
         if (genMethods == null || genMethods.IsEmpty())
             return this;
         var t = genMethods.First(item => item.Name == "QueryPageAsync").MakeGenericMethod(actionType, GenericTypeArguments.Last());
-        var am = new DynamicAction(t, route);
+        var am = new DynamicAction(t, route, attributes);
         Actions.Add(am);
         return this;
     }
-    public DynamicController AddPageAction<T>(string route) where T : class, IBaseGet
+    public DynamicController AddPageAction<T>(string route, Attribute[]? attributes = null) where T : class, IBaseGet
     {
         var type = typeof(T);
-        AddPageAction(type, route);
+        AddPageAction(type, route, attributes);
         return this;
     }
-    public DynamicController AddGetAction(Type actionType, string route)
+    public DynamicController AddGetAction(Type actionType, string route, Attribute[]? attributes = null)
     {
         var interfaces = actionType.GetInterfaces().Where(item => item.IsGenericType && item.GenericTypeArguments.Length == 2).ToArray();
         if (interfaces.IsEmpty())
@@ -107,14 +107,14 @@ public class DynamicController
         if (genMethods == null || genMethods.IsEmpty())
             return this;
         var t = genMethods.First(item => item.Name == "QueryAsync").MakeGenericMethod(actionType, GenericTypeArguments.Last());
-        var am = new DynamicAction(t, route);
+        var am = new DynamicAction(t, route, attributes);
         Actions.Add(am);
         return this;
     }
-    public DynamicController AddGetAction<T>(string route) where T : class, IBaseGet
+    public DynamicController AddGetAction<T>(string route, Attribute[]? attributes = null) where T : class, IBaseGet
     {
         var type = typeof(T);
-        AddGetAction(type, route);
+        AddGetAction(type, route, attributes);
         return this;
     }
 }
