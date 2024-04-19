@@ -232,16 +232,20 @@ public static class DynamicApiExt
         {
             var actionRoute = type.GetCustomAttribute<MapControllerAttribute>()!.ActionName;
             var attr = type.GetCustomAttribute<MapControllerAttribute>();
-            if (attr is MapGetAttribute)
-            {
-                attributes.Add(new HttpGetAttribute(actionRoute));
-            }
-            else if (attr is MapPostAttribute)
-            {
-                attributes.Add(new HttpPostAttribute(actionRoute));
-            }
             if (actionRoute.NotEmpty())
+            {
+                if (attr is MapGetAttribute)
+                {
+                    attributes.Add(new HttpGetAttribute());
+                    attributes.Add(new RouteAttribute(actionRoute));
+                }
+                else if (attr is MapPostAttribute)
+                {
+                    attributes.Add(new HttpPostAttribute());
+                    attributes.Add(new RouteAttribute(actionRoute));
+                }
                 controller.AddPageAction(type, actionRoute, attributes.ToArray());
+            }
         }
     }
     /// <summary>
