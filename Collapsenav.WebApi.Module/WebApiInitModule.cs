@@ -11,7 +11,7 @@ namespace Collapsenav.WebApi.Module;
 
 public class WebApiInitModule : InitModule
 {
-    public override void Init(IServiceCollection services, IHostBuilder? hostBuilder = null, IConfiguration? configuration = null, IHostEnvironment? environment = null)
+    public virtual void Init(IServiceCollection services, IHostBuilder? hostBuilder = null, IConfiguration? configuration = null, IHostEnvironment? environment = null)
     {
         Init(hostBuilder, configuration);
         Init(services, configuration);
@@ -31,7 +31,7 @@ public class WebApiInitModule : InitModule
         hostBuilder.UseAutoInjectProviderFactory();
     }
 
-    public override void Use(IApplicationBuilder app, IConfiguration? configuration = null, IHostEnvironment? environment = null)
+    public virtual void Use(IApplicationBuilder app, IConfiguration? configuration = null, IHostEnvironment? environment = null)
     {
         app.UseSwagger().UseSwaggerUI();
     }
